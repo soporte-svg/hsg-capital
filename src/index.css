@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+/* Avoid layout shift when modals open */
+body[aria-busy='true'] {
+  overflow: hidden;
+}
+
+@keyframes hsg-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@keyframes hsg-progress {
+  0% {
+    transform: translateX(-12%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.hsg-float {
+  animation: hsg-float 5.5s ease-in-out infinite;
+}
+.hsg-float-delayed {
+  animation: hsg-float 6.2s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+.hsg-progress {
+  transform-origin: left center;
+  animation: hsg-progress 1.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+/* Journey section: animated gradient tile pattern */
+@keyframes hsg-journey-cell {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+}
+
+.hsg-journey-cell {
+  animation: hsg-journey-cell 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hsg-journey-cell {
+    animation: none;
+    opacity: 0.35;
+    transform: none;
+  }
+}
+

@@ -56,7 +56,7 @@ export function CalculatorSection({ lang }: { lang: Lang }) {
     trackEvent('calculator_interaction', { capital: next, lang })
   }
 
-  const sliderPct = ((capital - 150_000) / (1_500_000 - 150_000)) * 100
+  const sliderPct = ((capital - 100_000) / (1_500_000 - 100_000)) * 100
 
   const onCta = () => {
     trackEvent('calculator_cta_click', { capital, lang })
@@ -94,7 +94,7 @@ export function CalculatorSection({ lang }: { lang: Lang }) {
 
               <input
                 type="range"
-                min={150_000}
+                min={100_000}
                 max={1_500_000}
                 step={50_000}
                 value={capital}

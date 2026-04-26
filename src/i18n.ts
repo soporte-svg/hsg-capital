@@ -46,7 +46,7 @@ const es: Dict = {
   calc_desc:
     'Basado en rangos conservadores de un portafolio operando en Georgia. No son promesas: son estimaciones para conversar con contexto.',
   calc_capital_label: 'Capital disponible',
-  calc_slider_hint: 'Rango: $150,000 – $1,500,000 • pasos de $50,000',
+  calc_slider_hint: 'Rango: $100,000 – $1,500,000 • pasos de $50,000',
   calc_bullets_intro: 'Con {capital} puedes construir un portafolio de:',
   calc_bullet_properties: '{count} propiedades',
   calc_bullet_net_rent: '~{amount}/mes en renta neta proyectada',
@@ -276,7 +276,7 @@ const en: Dict = {
   calc_desc:
     'Based on conservative ranges from an operating portfolio in Georgia. Not a promise — estimates to give you context for a real conversation.',
   calc_capital_label: 'Available capital',
-  calc_slider_hint: 'Range: $150,000 – $1,500,000 • $50,000 steps',
+  calc_slider_hint: 'Range: $100,000 – $1,500,000 • $50,000 steps',
   calc_bullets_intro: 'With {capital} you can build a portfolio of:',
   calc_bullet_properties: '{count} properties',
   calc_bullet_net_rent: '~{amount}/mo in projected net rent',

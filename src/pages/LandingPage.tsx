@@ -6,14 +6,14 @@ import { t } from '../i18n'
 import { CONTACT_EMAIL, getWhatsAppHref } from '../config'
 import { trackEvent } from '../lib/tracking'
 import { CheckIcon, WhatsAppIcon } from '../components/icons'
-import { HeroShowcase } from '../components/HeroShowcase'
-import { HeroShowcasePulse } from '../components/HeroShowcasePulse'
+import { LandingHeroSection } from '../components/LandingHeroSection'
 import { CalculatorSection } from '../components/CalculatorSection'
 import { JourneyTimelineSection } from '../components/JourneyTimelineSection'
 import { OperatorsStatementSection } from '../components/OperatorsStatementSection'
 import { PortfolioPerformanceSection } from '../components/PortfolioPerformanceSection'
 import { FeesTransparencySection } from '../components/FeesTransparencySection'
 import { TaxCheatSheetSection } from '../components/TaxCheatSheetSection'
+import { LandingFaqSection } from '../components/LandingFaqSection'
 import { Button, Container, Modal, SectionTitle } from '../components/ui'
 
 /**
@@ -103,30 +103,10 @@ function AnchorLink({
     <a
       href={href}
       onClick={onClick}
-      className={`text-sm font-medium text-slate-700 hover:text-slate-900 ${className}`}
+      className={`text-sm font-medium text-slate-900/75 transition-opacity hover:text-slate-900 hover:opacity-100 ${className}`}
     >
       {children}
     </a>
-  )
-}
-
-function NavRouteLink({
-  onClick,
-  children,
-  className = '',
-}: {
-  onClick: () => void
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`text-sm font-medium text-slate-700 hover:text-slate-900 ${className}`}
-    >
-      {children}
-    </button>
   )
 }
 
@@ -146,7 +126,6 @@ export function LandingPage({
   const SHOW_PORTFOLIO_SIMULATOR_WHY = false
   const isSpectrum = variant === 'spectrum'
   const langPath = `/${lang}`
-  const capitalPath = '/capital'
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -184,10 +163,10 @@ export function LandingPage({
 
   return (
     <div
-      className={`min-h-screen text-slate-900 ${
+      className={`min-h-screen overflow-x-hidden text-slate-900 ${
         isSpectrum
           ? 'spectrum-landing relative bg-[linear-gradient(180deg,#f5f3ff_0%,#ffffff_22%,#f8fafc_55%,#eff6ff_88%,#ffffff_100%)]'
-          : 'bg-slate-50'
+          : 'bg-white'
       }`}
     >
       {isSpectrum ? (
@@ -221,77 +200,81 @@ export function LandingPage({
 
       {/* Navbar */}
       <div
-        className={`relative sticky top-0 z-[70] ${
+        className={`sticky top-0 z-[70] ${
           isSpectrum
             ? 'bg-white/92 shadow-[0_8px_32px_-14px_rgba(91,33,182,0.14)] backdrop-blur-xl'
-            : 'bg-white/95 shadow-[0_1px_0_rgba(15,23,42,0.05),0_10px_36px_-22px_rgba(15,23,42,0.1)] backdrop-blur'
+            : 'bg-white/92 shadow-[0_10px_32px_-22px_rgba(15,23,42,0.12)] backdrop-blur-[12px] ring-1 ring-slate-200/70'
         }`}
       >
         <Container>
-          <div className="flex h-14 min-h-[3.5rem] items-center justify-between gap-2 md:h-16 md:gap-3">
+          <div className="flex h-16 items-center justify-between gap-3">
             <a
               href={isSpectrum ? langPath : '#'}
               className="flex min-w-0 shrink-0 items-center gap-2"
               onClick={() => setNavOpen(false)}
             >
-              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-900/10">
+              <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-lg bg-brand-700 text-white shadow-sm shadow-brand-900/10">
                 <span className="text-sm font-bold tracking-tight">HSG</span>
               </div>
-              <span className="truncate text-sm font-semibold tracking-tight text-slate-900">
+              <span className="truncate text-[15px] font-semibold tracking-tight text-slate-900">
                 HSG Investment
               </span>
             </a>
 
             <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2 md:gap-3">
-              <nav className="hidden items-center gap-6 md:flex" aria-label="Main">
+              <nav className="hidden items-center gap-7 md:flex" aria-label="Main">
                 {SHOW_PORTFOLIO_SIMULATOR_WHY ? (
                   <AnchorLink href="#properties">{t(lang, 'nav_properties')}</AnchorLink>
                 ) : null}
+                <AnchorLink href="#problem">{t(lang, 'nav_operators')}</AnchorLink>
+                <AnchorLink href="#calculator">{t(lang, 'calc_kicker')}</AnchorLink>
                 <AnchorLink href="#journey">{t(lang, 'nav_journey')}</AnchorLink>
-                <AnchorLink href="#operators">{t(lang, 'nav_operators')}</AnchorLink>
                 <AnchorLink href="#faq">{t(lang, 'nav_faq')}</AnchorLink>
-                <NavRouteLink
-                  onClick={() => navigate(isSpectrum ? langPath : capitalPath)}
-                >
-                  HSG Capital
-                </NavRouteLink>
               </nav>
 
-              <div
-                className={`flex shrink-0 items-center rounded-lg p-0.5 ring-1 sm:rounded-xl sm:p-1 ${
-                  isSpectrum
-                    ? 'bg-violet-50/90 ring-violet-200/60'
-                    : 'bg-slate-50 ring-slate-200/80'
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNavOpen(false)
-                    navigate(isSpectrum ? '/es/capital' : '/es')
-                  }}
-                  className={`rounded-md px-2 py-1.5 text-xs font-semibold sm:rounded-lg sm:px-3 sm:py-1 ${
-                    lang === 'es'
-                      ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/80'
-                      : 'text-slate-600 hover:text-slate-900'
+              <div className="hidden sm:flex">
+                <div
+                  className={`relative inline-flex items-center rounded-full p-1 ring-1 ${
+                    isSpectrum
+                      ? 'bg-white/80 ring-violet-200/80'
+                      : 'bg-slate-50 ring-slate-200/80'
                   }`}
+                  role="group"
+                  aria-label={lang === 'en' ? 'Language' : 'Idioma'}
                 >
-                  {t(lang, 'lang_es')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNavOpen(false)
-                    navigate(isSpectrum ? '/en/capital' : '/en')
-                  }}
-                  className={`rounded-md px-2 py-1.5 text-xs font-semibold sm:rounded-lg sm:px-3 sm:py-1 ${
-                    lang === 'en'
-                      ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/80'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {t(lang, 'lang_en')}
-                </button>
+                  <span
+                    className={`pointer-events-none absolute top-1 bottom-1 w-[calc(50%-0.25rem)] rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                      lang === 'en' ? 'translate-x-full' : 'translate-x-0'
+                    }`}
+                    aria-hidden
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNavOpen(false)
+                      navigate(isSpectrum ? '/es/capital' : '/es')
+                    }}
+                    className={`relative z-10 rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
+                      lang === 'es' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                    aria-pressed={lang === 'es'}
+                  >
+                    {t(lang, 'lang_es')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNavOpen(false)
+                      navigate(isSpectrum ? '/en/capital' : '/en')
+                    }}
+                    className={`relative z-10 rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
+                      lang === 'en' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                    aria-pressed={lang === 'en'}
+                  >
+                    {t(lang, 'lang_en')}
+                  </button>
+                </div>
               </div>
 
               <Button
@@ -299,7 +282,7 @@ export function LandingPage({
                 target="_blank"
                 rel="noreferrer"
                 variant="whatsapp"
-                className="hidden md:inline-flex"
+                className="hidden md:inline-flex rounded-full px-[18px] py-[9px]"
               >
                 <WhatsAppIcon className="h-4 w-4 text-white" />
                 {t(lang, 'hero_primary')}
@@ -307,7 +290,7 @@ export function LandingPage({
 
               <button
                 type="button"
-                className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 md:hidden ${
+                className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 md:hidden ${
                   isSpectrum
                     ? 'bg-white/80 text-violet-900 ring-1 ring-violet-200/70'
                     : 'bg-white text-slate-800 ring-1 ring-slate-200/80'
@@ -359,7 +342,7 @@ export function LandingPage({
                 </a>
                 <button
                   type="button"
-                  className={`inline-flex h-10 w-10 items-center justify-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 ${
+                  className={`inline-flex h-10 w-10 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 ${
                     isSpectrum
                       ? 'bg-white text-violet-900 ring-1 ring-violet-200/70'
                       : 'bg-white text-slate-800 ring-1 ring-slate-200/80'
@@ -373,6 +356,50 @@ export function LandingPage({
             </div>
 
             <div className="px-4 pb-6 pt-2">
+              <div className="mb-4">
+                <div
+                  className={`relative inline-flex items-center rounded-full p-1 ring-1 ${
+                    isSpectrum
+                      ? 'bg-white ring-violet-200/80'
+                      : 'bg-slate-50 ring-slate-200/80'
+                  }`}
+                  role="group"
+                  aria-label={lang === 'en' ? 'Language' : 'Idioma'}
+                >
+                  <span
+                    className={`pointer-events-none absolute top-1 bottom-1 w-[calc(50%-0.25rem)] rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                      lang === 'en' ? 'translate-x-full' : 'translate-x-0'
+                    }`}
+                    aria-hidden
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNavOpen(false)
+                      navigate(isSpectrum ? '/es/capital' : '/es')
+                    }}
+                    className={`relative z-10 rounded-full px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                      lang === 'es' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                    aria-pressed={lang === 'es'}
+                  >
+                    {t(lang, 'lang_es')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNavOpen(false)
+                      navigate(isSpectrum ? '/en/capital' : '/en')
+                    }}
+                    className={`relative z-10 rounded-full px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                      lang === 'en' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                    aria-pressed={lang === 'en'}
+                  >
+                    {t(lang, 'lang_en')}
+                  </button>
+                </div>
+              </div>
               <nav className="mx-auto flex max-w-6xl flex-col gap-1" aria-label="Mobile">
                 {SHOW_PORTFOLIO_SIMULATOR_WHY ? (
                   <AnchorLink
@@ -384,18 +411,25 @@ export function LandingPage({
                   </AnchorLink>
                 ) : null}
                 <AnchorLink
+                  href="#problem"
+                  className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                  onClick={() => setNavOpen(false)}
+                >
+                  {t(lang, 'nav_operators')}
+                </AnchorLink>
+                <AnchorLink
+                  href="#calculator"
+                  className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                  onClick={() => setNavOpen(false)}
+                >
+                  {t(lang, 'calc_kicker')}
+                </AnchorLink>
+                <AnchorLink
                   href="#journey"
                   className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
                   onClick={() => setNavOpen(false)}
                 >
                   {t(lang, 'nav_journey')}
-                </AnchorLink>
-                <AnchorLink
-                  href="#operators"
-                  className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
-                  onClick={() => setNavOpen(false)}
-                >
-                  {t(lang, 'nav_operators')}
                 </AnchorLink>
                 <AnchorLink
                   href="#faq"
@@ -404,15 +438,6 @@ export function LandingPage({
                 >
                   {t(lang, 'nav_faq')}
                 </AnchorLink>
-                <NavRouteLink
-                  className="block w-full rounded-xl px-3 py-3 text-left text-base font-semibold text-slate-900 active:bg-slate-100/80"
-                  onClick={() => {
-                    setNavOpen(false)
-                    navigate(isSpectrum ? langPath : capitalPath)
-                  }}
-                >
-                  HSG Capital
-                </NavRouteLink>
               </nav>
 
               <div className="mx-auto mt-6 max-w-6xl">
@@ -434,191 +459,110 @@ export function LandingPage({
       ) : null}
 
       {/* Hero */}
-      <div
-        className={`relative overflow-hidden ${
-          isSpectrum ? 'border-b border-violet-200/25' : 'bg-white'
-        }`}
-      >
-        {/* Clean gradient background */}
-        <div
-          className={
-            isSpectrum
-              ? 'pointer-events-none absolute inset-0 bg-[radial-gradient(1000px_520px_at_18%_8%,rgba(124,58,237,0.12),transparent_58%),radial-gradient(900px_480px_at_88%_28%,rgba(37,99,235,0.11),transparent_55%),linear-gradient(to_bottom,rgba(255,255,255,0.92),#ffffff,#f8fafc)]'
-              : 'pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_20%_10%,rgba(37,99,235,0.10),transparent_60%),radial-gradient(900px_500px_at_90%_30%,rgba(56,189,248,0.10),transparent_55%),linear-gradient(to_bottom,#ffffff,#f8fafc,#ffffff)]'
-          }
-        />
-        <Container>
-          <div className="relative py-14 md:py-20">
-            <div className="grid items-center gap-10 md:grid-cols-2">
-              <div>
-                <p
-                  className={`inline-flex items-center rounded-full px-4 py-1 text-xs font-semibold ring-1 ${
-                    isSpectrum
-                      ? 'border border-violet-200/60 bg-white/80 text-violet-800 ring-violet-100/80'
-                      : 'bg-brand-50 text-brand-700 ring-brand-100'
-                  }`}
-                >
-                  HSG Investment • Real estate • USD income
-                </p>
-                <h1 className="mt-5 text-balance text-4xl font-extrabold tracking-tight text-slate-900 md:text-6xl">
-                  {t(lang, 'hero_title')}
-                </h1>
-                <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-slate-600 md:text-lg">
-                  {t(lang, 'hero_sub')}
-                </p>
-                <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row">
-                  <Button
-                    href={whatsappHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    variant="whatsapp"
-                    className="w-full sm:w-auto"
-                  >
-                    <WhatsAppIcon className="h-5 w-5 text-white" />
-                    {t(lang, 'hero_primary')}
-                  </Button>
-                  <Button
-                    href={SHOW_PORTFOLIO_SIMULATOR_WHY ? '#properties' : '#calculator'}
-                    variant="secondary"
-                    className="w-full sm:w-auto"
-                  >
-                    {t(
-                      lang,
-                      SHOW_PORTFOLIO_SIMULATOR_WHY
-                        ? 'hero_secondary'
-                        : 'hero_secondary_fallback',
-                    )}
-                  </Button>
-                </div>
-              </div>
+      <LandingHeroSection
+        lang={lang}
+        whatsappHref={whatsappHref}
+        isSpectrum={isSpectrum}
+        showPortfolioCta={SHOW_PORTFOLIO_SIMULATOR_WHY}
+        usePulseHero={USE_HERO_SHOWCASE_PULSE}
+      />
 
-              {USE_HERO_SHOWCASE_PULSE ? (
-                <HeroShowcasePulse lang={lang} />
-              ) : (
-                <HeroShowcase lang={lang} />
-              )}
-            </div>
-          </div>
-        </Container>
-      </div>
-
-      {/* Metrics */}
-      <div
-        className={`border-b py-0 ${
-          isSpectrum
-            ? 'border-violet-200/25 bg-transparent'
-            : 'border-slate-200/60 bg-white'
-        }`}
-      >
-        <Container>
-          <div className="grid gap-4 py-10 md:grid-cols-4">
+      {/* Stats strip */}
+      <div className="border-y border-slate-200/80 bg-white">
+        <div className="mx-auto w-full max-w-[calc(1160px+160px)] px-4 sm:px-6 lg:px-20">
+          <div className="grid grid-cols-2 md:grid-cols-4">
             {[
               ['metrics_min', 'metrics_min_value'],
               ['metrics_yield', 'metrics_yield_value'],
               ['metrics_market', 'metrics_market_value'],
               ['metrics_currency', 'metrics_currency_value'],
-            ].map(([k, v]) => (
+            ].map(([k, v], i) => (
               <div
                 key={k}
-                className={`rounded-2xl p-5 shadow-sm ${
-                  isSpectrum
-                    ? 'border border-white/70 bg-white/75 ring-1 ring-violet-100/70 backdrop-blur-md'
-                    : 'bg-white ring-1 ring-slate-200/70'
-                }`}
+                className={[
+                  'px-6 py-9 md:px-10',
+                  i % 2 === 1 ? 'border-l border-slate-200/80' : '',
+                  i >= 2 ? 'border-t border-slate-200/80 md:border-t-0' : '',
+                  i < 3 ? 'md:border-r md:border-slate-200/80' : '',
+                ].join(' ')}
               >
-                <p className="text-2xl font-extrabold tracking-tight text-slate-900">
+                <p className="text-[clamp(2.25rem,4vw,3.25rem)] font-extrabold tracking-[-0.04em] text-slate-900 leading-none">
                   {t(lang, v)}
                 </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{t(lang, k)}</p>
+                <p className="mt-2 text-[13px] font-medium text-slate-500">
+                  {t(lang, k)}
+                </p>
               </div>
             ))}
           </div>
-        </Container>
+        </div>
       </div>
 
       {/* Problem */}
-      <div
-        id="problem"
-        className={`relative border-b ${
-          isSpectrum ? 'border-violet-200/25' : 'border-slate-200/60'
-        }`}
-      >
-        <div
-          className={
-            isSpectrum
-              ? 'pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-violet-50/30 to-brand-50/25'
-              : 'pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-white'
-          }
-        />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-70"
-          style={{
-            backgroundImage: [
-              'radial-gradient(circle at 18% 12%, rgba(37,99,235,0.22), transparent 55%)',
-              'radial-gradient(circle at 88% 18%, rgba(56,189,248,0.18), transparent 55%)',
-              'radial-gradient(circle at 50% 92%, rgba(37,99,235,0.12), transparent 60%)',
-              'radial-gradient(rgba(37,99,235,0.55) 1px, transparent 1px)',
-            ].join(','),
-            backgroundSize: 'auto, auto, auto, 22px 22px',
-            backgroundPosition: 'center, center, center, 0 0',
-            maskImage:
-              'radial-gradient(ellipse at center, black 0%, black 62%, transparent 100%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse at center, black 0%, black 62%, transparent 100%)',
-          }}
-        />
+      <section id="problem" className="bg-[#09142A] py-24">
+        <div className="mx-auto w-full max-w-6xl px-4">
+          <div className="mx-auto max-w-[1160px]">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-brand-400">
+              {lang === 'en' ? 'The problem' : 'El problema'}
+            </p>
 
-        <Container>
-          <div className="relative py-16 md:py-20">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-balance text-2xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
-                {t(lang, 'problem_title')}
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-7 text-slate-600 md:text-base">
-                {t(lang, 'problem_lead')}
-              </p>
-            </div>
+            {(() => {
+              const title = t(lang, 'problem_title')
+              const parts = title.trim().split(/\s+/)
+              const last = parts.pop()
+              const head = parts.join(' ')
+              return (
+                <h2 className="mt-4 max-w-[40rem] text-balance text-3xl font-extrabold tracking-tight text-white md:text-5xl md:leading-[1.1]">
+                  {head}{' '}
+                  <em className="font-extrabold not-italic text-white/45">{last}</em>
+                </h2>
+              )
+            })()}
 
-            <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-3">
-              {[
-                ['problem_1_title', 'problem_1_body'],
-                ['problem_2_title', 'problem_2_body'],
-                ['problem_3_title', 'problem_3_body'],
-              ].map(([titleKey, bodyKey]) => (
-                <div
-                  key={titleKey}
-                  className={`rounded-2xl p-6 shadow-sm backdrop-blur ${
-                    isSpectrum
-                      ? 'border border-white/70 bg-white/70 ring-1 ring-violet-100/60'
-                      : 'bg-white/80 ring-1 ring-slate-200/70'
-                  }`}
-                >
-                  <p className="text-sm font-extrabold text-slate-900">
-                    {t(lang, titleKey)}
-                  </p>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
-                    {t(lang, bodyKey)}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <p className="mt-4 max-w-[32rem] text-pretty text-base leading-7 text-white/45">
+              {t(lang, 'problem_lead')}
+            </p>
 
-            <div className="mx-auto mt-10 max-w-3xl">
-              <div
-                className={`rounded-full border px-6 py-4 text-center shadow-[0_18px_60px_-34px_rgba(2,6,23,0.35)] backdrop-blur-md md:px-10 md:py-5 ${
-                  isSpectrum
-                    ? 'border-violet-200/50 bg-white/60 ring-1 ring-brand-100/50'
-                    : 'border-white/60 bg-white/35 ring-1 ring-slate-200/60'
-                }`}
-              >
-                <p className="text-sm font-semibold leading-7 text-slate-900 md:text-base">
-                  {t(lang, 'problem_closing')}
-                </p>
+            <div className="mt-16 overflow-hidden rounded-2xl border border-white/10 bg-white/10">
+              <div className="grid gap-px bg-white/10 md:grid-cols-3">
+                {[
+                  ['01', 'problem_1_title', 'problem_1_body'],
+                  ['02', 'problem_2_title', 'problem_2_body'],
+                  ['03', 'problem_3_title', 'problem_3_body'],
+                ].map(([num, titleKey, bodyKey]) => (
+                  <div
+                    key={titleKey}
+                    className="bg-white/[0.03] px-7 py-9 transition-colors hover:bg-white/[0.06]"
+                  >
+                    <p className="text-[72px] font-extrabold tracking-[-0.05em] text-white/[0.06] leading-none">
+                      {num}
+                    </p>
+                    <p className="mt-4 text-base font-extrabold text-white/90">
+                      {t(lang, titleKey)}
+                    </p>
+                    <p className="mt-3 text-sm leading-7 text-white/45">
+                      {t(lang, bodyKey)}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
+
+            <p className="mt-12 text-center text-[15px] font-semibold text-white/35">
+              {lang === 'en' ? (
+                <>
+                  That's why we built <strong className="text-white/85">HSG Capital Investment.</strong>
+                </>
+              ) : (
+                <>
+                  Por eso construimos{' '}
+                  <strong className="text-white/85">HSG Capital Investment.</strong>
+                </>
+              )}
+            </p>
           </div>
-        </Container>
-      </div>
+        </div>
+      </section>
 
       <div
         className={
@@ -830,92 +774,51 @@ export function LandingPage({
       ) : null}
 
       {/* FAQ */}
-      <div
-        id="faq"
-        className={`border-t py-16 md:py-20 ${
-          isSpectrum
-            ? 'border-violet-200/25 bg-white/45 backdrop-blur-sm'
-            : 'border-slate-200/60 bg-white'
-        }`}
-      >
-        <Container>
-          <SectionTitle title={t(lang, 'faq_title')} />
-          <div className="mx-auto mt-10 max-w-3xl space-y-3">
-            {(
-              [
-                ['faq_q1', 'faq_a1'],
-                ['faq_q2', 'faq_a2'],
-                ['faq_q3', 'faq_a3'],
-                ['faq_q4', 'faq_a4'],
-                ['faq_q5', 'faq_a5'],
-                ['faq_q6', 'faq_a6'],
-                ['faq_q7', 'faq_a7'],
-                ['faq_q8', 'faq_a8'],
-              ] as const
-            ).map(([qk, ak]) => (
-              <FaqItem
-                key={qk}
-                q={t(lang, qk)}
-                a={t(lang, ak)}
-                trackId={qk}
-                lang={lang}
-                spectrum={isSpectrum}
-              />
-            ))}
-          </div>
-        </Container>
-      </div>
+      <LandingFaqSection lang={lang} />
 
       {/* Final CTA */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-brand-950 via-[#0c1929] to-brand-950 py-20 md:py-24">
+      <section className="relative overflow-hidden bg-[#09142A] py-28">
         <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(59,130,246,0.18),transparent_55%)]"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(27,79,216,0.20)_0%,transparent_65%)]"
           aria-hidden
         />
         <Container>
-          <div className="relative mx-auto max-w-2xl rounded-3xl border border-white/10 bg-white/[0.06] px-6 py-10 text-center shadow-[0_32px_80px_-48px_rgba(0,0,0,0.55)] backdrop-blur-md md:px-12 md:py-12">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-300/90">
+          <div className="relative mx-auto max-w-3xl text-center">
+            <p className="inline-block rounded-full border border-brand-500/25 bg-brand-500/15 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-brand-200/90">
               {t(lang, 'final_cta_kicker')}
             </p>
-            <h2 className="mt-4 text-balance text-3xl font-extrabold tracking-tight text-white md:text-4xl">
+            <h2 className="mt-6 text-balance text-4xl font-extrabold tracking-tight text-white md:text-6xl md:leading-[1.05]">
               {t(lang, 'final_cta_title')}
             </h2>
-            <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-white/75">
+            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-7 text-white/50">
               {t(lang, 'final_cta_sub')}
             </p>
-            <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <Button
                 href={whatsappHref}
                 target="_blank"
                 rel="noreferrer"
                 variant="whatsapp"
-                className="px-6 py-3 text-base"
+                className="rounded-full px-6 py-3 text-base"
                 onClick={() => trackEvent('final_cta_whatsapp', { lang })}
               >
                 <WhatsAppIcon className="h-5 w-5 text-white" />
                 {t(lang, 'final_cta_button')}
               </Button>
-              <Button
+              <a
                 href="#calculator"
-                variant="secondary"
-                className="px-6 py-3 text-base shadow-sm"
+                className="rounded-full border border-white/15 bg-white/10 px-6 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/15 hover:text-white"
                 onClick={() => trackEvent('final_cta_calculator', { lang })}
               >
                 {t(lang, 'final_cta_secondary')}
-              </Button>
+              </a>
             </div>
           </div>
         </Container>
-      </div>
+      </section>
 
       {/* Footer */}
-      <footer
-        className={`border-t py-12 ${
-          isSpectrum
-            ? 'border-violet-200/30 bg-white/80 backdrop-blur-md'
-            : 'border-slate-100 bg-white'
-        }`}
-      >
+      <footer className="border-t border-slate-200 bg-white py-12">
         <Container>
           <div className="grid gap-10 md:grid-cols-3 md:items-start">
             <div>
@@ -939,7 +842,7 @@ export function LandingPage({
                 <a className="block text-slate-600 hover:text-slate-900" href="#journey">
                   {t(lang, 'nav_journey')}
                 </a>
-                <a className="block text-slate-600 hover:text-slate-900" href="#operators">
+                <a className="block text-slate-600 hover:text-slate-900" href="#problem">
                   {t(lang, 'nav_operators')}
                 </a>
                 <a className="block text-slate-600 hover:text-slate-900" href="#faq">
@@ -959,10 +862,10 @@ export function LandingPage({
                   <button
                     type="button"
                     onClick={() => navigate(isSpectrum ? '/es/capital' : '/es')}
-                    className={`rounded-lg px-2 py-1 text-xs font-semibold ring-1 ${
+                    className={`rounded-md px-2 py-1 text-[13px] font-semibold ${
                       lang === 'es'
-                        ? 'bg-slate-900 text-white ring-slate-900'
-                        : 'bg-white text-slate-700 ring-slate-200 hover:bg-slate-50'
+                        ? 'text-slate-900'
+                        : 'text-slate-500 hover:text-slate-900'
                     }`}
                   >
                     ES
@@ -970,10 +873,10 @@ export function LandingPage({
                   <button
                     type="button"
                     onClick={() => navigate(isSpectrum ? '/en/capital' : '/en')}
-                    className={`rounded-lg px-2 py-1 text-xs font-semibold ring-1 ${
+                    className={`rounded-md px-2 py-1 text-[13px] font-semibold ${
                       lang === 'en'
-                        ? 'bg-slate-900 text-white ring-slate-900'
-                        : 'bg-white text-slate-700 ring-slate-200 hover:bg-slate-50'
+                        ? 'text-slate-900'
+                        : 'text-slate-500 hover:text-slate-900'
                     }`}
                   >
                     EN
@@ -1010,68 +913,6 @@ export function LandingPage({
         </div>
       </Modal>
       </div>
-    </div>
-  )
-}
-
-function FaqItem({
-  q,
-  a,
-  trackId,
-  lang,
-  spectrum = false,
-}: {
-  q: string
-  a: string
-  trackId: string
-  lang: Lang
-  spectrum?: boolean
-}) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div
-      className={
-        spectrum
-          ? 'rounded-2xl border border-white/70 bg-white/75 ring-1 ring-violet-100/60 backdrop-blur-md'
-          : 'rounded-2xl bg-slate-50 ring-1 ring-slate-200/70'
-      }
-    >
-      <button
-        type="button"
-        className="flex w-full items-center justify-between gap-4 p-5 text-left"
-        onClick={() => {
-          setOpen((v) => {
-            const next = !v
-            if (next) trackEvent('faq_expand', { id: trackId, lang })
-            return next
-          })
-        }}
-        aria-expanded={open}
-      >
-        <span className="text-sm font-semibold text-slate-900">{q}</span>
-        <svg
-          viewBox="0 0 24 24"
-          className={`h-5 w-5 shrink-0 text-slate-500 transition ${
-            open ? 'rotate-180' : ''
-          }`}
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path
-            d="m6 9 6 6 6-6"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-      {open ? (
-        <div className="px-5 pb-5">
-          <p className="text-sm leading-6 text-slate-600">{a}</p>
-        </div>
-      ) : null}
     </div>
   )
 }

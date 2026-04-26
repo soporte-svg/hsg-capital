@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import type { Lang } from '../i18n'
 import { t } from '../i18n'
 import { trackEvent } from '../lib/tracking'
-import { Button, Container, SectionTitle } from './ui'
+import { Button, Container } from './ui'
 
 const TOPICS: { title: string; body: string }[] = [
   { title: 'tax_income_title', body: 'tax_income_body' },
@@ -27,17 +27,28 @@ export function TaxCheatSheetSection({ lang }: { lang: Lang }) {
   }
 
   return (
-    <section id="tax" className="border-b border-slate-200/60 bg-slate-50 py-16 md:py-20">
+    <section id="tax" className="bg-[#F4F6FB] py-24">
       <Container>
-        <SectionTitle title={t(lang, 'tax_title')} subtitle={t(lang, 'tax_lead')} />
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-brand-700">
+            {lang === 'en' ? 'Tax context' : 'Contexto fiscal'}
+          </p>
+          <h2 className="mt-4 text-balance text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl md:leading-[1.1]">
+            {t(lang, 'tax_title')}
+          </h2>
+          <p className="mx-auto mt-3 max-w-[34rem] text-pretty text-[15px] leading-7 text-slate-600">
+            {t(lang, 'tax_lead')}
+          </p>
+        </div>
 
         <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-3">
           {TOPICS.map((topic) => (
             <div
               key={topic.title}
-              className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm ring-1 ring-slate-100 md:p-7"
+              className="rounded-2xl border border-slate-200/90 bg-white p-7 shadow-[0_2px_20px_rgba(0,0,0,0.04)] ring-0"
             >
-              <p className="text-base font-extrabold tracking-tight text-slate-900">
+              <div className="h-1 w-10 rounded-full bg-brand-700" aria-hidden />
+              <p className="mt-4 text-base font-extrabold tracking-tight text-slate-900">
                 {t(lang, topic.title)}
               </p>
               <p className="mt-3 text-sm leading-7 text-slate-600">{t(lang, topic.body)}</p>
@@ -45,7 +56,7 @@ export function TaxCheatSheetSection({ lang }: { lang: Lang }) {
           ))}
         </div>
 
-        <div className="mx-auto mt-10 max-w-lg rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm ring-1 ring-slate-100 md:p-8">
+        <div className="mx-auto mt-12 max-w-lg rounded-[20px] border border-slate-200/90 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.05)]">
           <p className="text-center text-lg font-bold text-slate-900">
             {t(lang, 'tax_cta_title')}
           </p>

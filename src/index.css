@@ -17,6 +17,33 @@ body[aria-busy='true'] {
   overflow: hidden;
 }
 
+/* Landing: calculator slider look (matches /es/landing HTML) */
+.calc-range {
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+}
+.calc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #1d4ed8;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(27, 79, 216, 0.35);
+  cursor: pointer;
+}
+.calc-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #1d4ed8;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(27, 79, 216, 0.35);
+  cursor: pointer;
+}
+
 @keyframes hsg-float {
   0%,
   100% {

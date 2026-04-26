@@ -1,27 +1,34 @@
 import type { Lang } from '../i18n'
 import { t } from '../i18n'
-import { Container, SectionTitle } from './ui'
+import { Container } from './ui'
 
 const FEE_ROWS = [1, 2, 3, 4, 5, 6] as const
 
 export function FeesTransparencySection({ lang }: { lang: Lang }) {
   return (
-    <section id="fees" className="border-b border-slate-200/60 bg-white py-16 md:py-20">
+    <section id="fees" className="bg-white py-24">
       <Container>
-        <SectionTitle title={t(lang, 'fees_title')} />
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-brand-700">
+            {lang === 'en' ? 'Transparency' : 'Transparencia'}
+          </p>
+          <h2 className="mt-4 text-balance text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl md:leading-[1.1]">
+            {t(lang, 'fees_title')}
+          </h2>
+        </div>
 
         <div className="mx-auto mt-10 max-w-5xl">
-          <div className="hidden overflow-hidden rounded-2xl border border-slate-200/90 ring-1 ring-slate-100 md:block">
+          <div className="hidden overflow-hidden rounded-2xl border border-slate-200/90 md:block">
             <table className="w-full border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50/90">
-                  <th className="px-5 py-3.5 font-semibold text-slate-900">
+                <tr className="bg-[#09142A]">
+                  <th className="px-6 py-4 text-[12px] font-extrabold uppercase tracking-[0.06em] text-white/70">
                     {t(lang, 'fees_col_fee')}
                   </th>
-                  <th className="px-5 py-3.5 font-semibold text-slate-900">
+                  <th className="px-6 py-4 text-[12px] font-extrabold uppercase tracking-[0.06em] text-white/70">
                     {t(lang, 'fees_col_when')}
                   </th>
-                  <th className="px-5 py-3.5 font-semibold text-slate-900">
+                  <th className="px-6 py-4 text-[12px] font-extrabold uppercase tracking-[0.06em] text-white/70">
                     {t(lang, 'fees_col_amount')}
                   </th>
                 </tr>
@@ -30,15 +37,15 @@ export function FeesTransparencySection({ lang }: { lang: Lang }) {
                 {FEE_ROWS.map((n) => (
                   <tr
                     key={n}
-                    className="border-b border-slate-100 last:border-0 odd:bg-white even:bg-slate-50/40"
+                    className="border-t border-slate-200/80 transition-colors hover:bg-slate-50"
                   >
-                    <td className="px-5 py-3.5 font-semibold text-slate-900">
+                    <td className="px-6 py-4 font-extrabold text-slate-900">
                       {t(lang, `fees_r${n}_fee`)}
                     </td>
-                    <td className="px-5 py-3.5 text-slate-600">
+                    <td className="px-6 py-4 text-slate-600">
                       {t(lang, `fees_r${n}_when`)}
                     </td>
-                    <td className="px-5 py-3.5 text-slate-700">
+                    <td className="px-6 py-4 font-semibold text-brand-700">
                       {t(lang, `fees_r${n}_amount`)}
                     </td>
                   </tr>
@@ -66,7 +73,7 @@ export function FeesTransparencySection({ lang }: { lang: Lang }) {
             ))}
           </div>
 
-          <p className="mx-auto mt-8 max-w-3xl text-pretty text-center text-sm leading-7 text-slate-600 md:text-base">
+          <p className="mx-auto mt-10 max-w-3xl text-pretty text-center text-[13px] leading-6 text-slate-600 md:text-[15px] md:leading-7">
             {t(lang, 'fees_note')}
           </p>
         </div>

@@ -4,8 +4,8 @@ type Dict = Record<string, string>
 
 const es: Dict = {
   nav_properties: 'Propiedades',
-  nav_operators: 'Operadores',
-  nav_journey: 'Llamada → renta',
+  nav_operators: 'Contexto',
+  nav_journey: 'Nuestra operación',
   nav_faq: 'FAQ',
   lang_es: 'ES',
   lang_en: 'EN',
@@ -233,8 +233,8 @@ const es: Dict = {
 
 const en: Dict = {
   nav_properties: 'Properties',
-  nav_operators: 'Operators',
-  nav_journey: 'Call → rent',
+  nav_operators: 'Context',
+  nav_journey: 'Our operations',
   nav_faq: 'FAQ',
   lang_es: 'ES',
   lang_en: 'EN',

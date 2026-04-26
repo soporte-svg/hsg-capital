@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSG Investment — Portafolio de propiedades en EE.UU.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #1B4FD8;
+  --blue-hover: #1640b8;
+  --blue-light: #EEF3FF;
+  --blue-mid: rgba(27,79,216,0.10);
+  --navy: #09142A;
+  --navy2: #0D1E3A;
+  --off-white: #F4F6FB;
+  --white: #FFFFFF;
+  --green: #059669;
+  --green-hover: #047857;
+  --text: #09142A;
+  --muted: #5B6476;
+  --border: #E2E7F0;
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --r: 14px;
+  --max: 1160px;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--text); background: var(--white); overflow-x: hidden; }
+
+/* ─── NAV ─────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(24px,5vw,80px); height: 64px;
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--text); text-decoration: none; }
+.nav-logo-icon {
+  width: 34px; height: 34px; border-radius: 8px; background: var(--blue);
+  display: grid; place-items: center; color: white; font-weight: 800; font-size: 13px; letter-spacing: -0.5px;
+}
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; opacity: 0.75; transition: opacity .2s; }
+.nav-links a:hover { opacity: 1; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.lang-btn { font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 6px; border: none; background: none; cursor: pointer; color: var(--muted); }
+.lang-btn.active { color: var(--text); }
+.btn-wa {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--green); color: white; font-weight: 600; font-size: 14px;
+  border: none; border-radius: 100px; padding: 9px 18px; cursor: pointer; text-decoration: none;
+  transition: background .2s;
+}
+.btn-wa:hover { background: var(--green-hover); }
+.btn-wa svg { width: 16px; height: 16px; }
+
+/* ─── HERO ─────────────────────────────────────────────── */
+.hero {
+  /* Match our React hero background (radials + soft vertical wash) */
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(37,99,235,0.10), transparent 60%),
+    radial-gradient(900px 500px at 90% 30%, rgba(56,189,248,0.10), transparent 55%),
+    linear-gradient(to bottom, #ffffff, #f8fafc, #ffffff);
+  width: 100%;
+  padding: 80px 0 60px;
+}
+.hero-inner {
+  padding: 0 clamp(24px,5vw,80px);
+  display: grid; grid-template-columns: 1fr 420px; gap: 60px;
+  align-items: center; max-width: calc(var(--max) + 160px); margin: 0 auto;
+}
+.hero-eyebrow { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--blue); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 20px; }
+.hero-eyebrow span { opacity: .5; }
+.hero h1 { font-size: clamp(38px,5vw,62px); font-weight: 800; line-height: 1.06; letter-spacing: -.03em; color: var(--text); margin-bottom: 20px; }
+.hero-sub { font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 420px; margin-bottom: 32px; }
+.hero-btns { display: flex; align-items: center; gap: 12px; }
+.btn-ghost { font-size: 15px; font-weight: 600; color: var(--text); background: none; border: none; cursor: pointer; text-decoration: none; padding: 4px 0; }
+
+/* Hero card */
+.hero-card {
+  background: linear-gradient(145deg, #0b1220 0%, #09142A 55%, #07102a 100%);
+  border-radius: 28px; padding: 0; position: relative; overflow: hidden;
+  box-shadow: 0 32px 90px rgba(9,20,42,0.30);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+.hero-card::before {
+  content: ''; position: absolute; top: -70px; right: -70px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(27,79,216,0.28) 0%, transparent 70%);
+}
+.hsp-orb-a, .hsp-orb-b { position:absolute; border-radius: 999px; filter: blur(40px); opacity: 1; }
+.hsp-orb-a { left: -25%; top: -25%; width: 70%; height: 55%; background: rgba(59,130,246,0.22); animation: orbA 20s ease-in-out infinite; }
+.hsp-orb-b { right: -25%; bottom: -25%; width: 65%; height: 50%; background: rgba(56,189,248,0.18); animation: orbB 24s ease-in-out infinite reverse; }
+@keyframes orbA { 0%,100% { transform: translate(0,0);} 50% { transform: translate(12%,8%);} }
+@keyframes orbB { 0%,100% { transform: translate(0,0);} 50% { transform: translate(-10%,-6%);} }
+.hsp-grid {
+  position:absolute; inset:0;
+  background-image: radial-gradient(circle at center, rgba(255,255,255,0.95) 1px, transparent 1px);
+  background-size: 14px 14px;
+  opacity: 0.06;
+}
+.hsp-top {
+  display:flex; align-items:center; justify-content: space-between; gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.hsp-live { display:flex; align-items:center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(110,231,183,0.92); }
+.hsp-live i { width: 8px; height: 8px; border-radius: 99px; display:block; background: #34d399; box-shadow: 0 0 14px rgba(52,211,153,0.55); }
+.hsp-chips { display:flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.hsp-chip {
+  font-size: 11px; font-weight: 700;
+  padding: 6px 10px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.88);
+}
+.hsp-chip.green { border-color: rgba(52,211,153,0.25); background: rgba(16,185,129,0.14); color: rgba(236,253,245,0.92); }
+.hsp-chip.amber { border-color: rgba(251,191,36,0.22); background: rgba(245,158,11,0.14); color: rgba(254,243,199,0.92); }
+.hsp-body { position: relative; padding: 22px 18px 18px; text-align: center; }
+.hsp-kicker { font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+.hsp-metric {
+  margin-top: 14px;
+  font-size: 56px; font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(224,242,254,1) 35%, rgba(191,219,254,1) 70%, rgba(255,255,255,1) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  background-size: 220% auto;
+  animation: shimmer 3.8s ease-in-out infinite;
+}
+@keyframes shimmer { 0%,100% { background-position: 0% 50%; opacity: .95; } 50% { background-position: 100% 50%; opacity: 1; } }
+.hsp-sub { margin-top: 12px; font-size: 14px; color: rgba(255,255,255,0.55); }
+.hsp-mini { display:flex; justify-content: center; gap: 26px; margin-top: 18px; font-size: 12px; color: rgba(255,255,255,0.55); }
+.hsp-mini b { display:block; margin-top: 4px; font-size: 13px; color: rgba(255,255,255,0.90); }
+.hsp-cta {
+  margin: 18px 18px 18px;
+  display:flex; align-items:center; justify-content: center; gap: 10px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.90);
+  font-size: 14px; font-weight: 700;
+}
+.hsp-cta span { color: rgba(110,231,183,0.95); }
+.hsp-slides { position: relative; min-height: 280px; }
+.hsp-slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 18px 14px 14px;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .7s cubic-bezier(0.16,1,0.3,1), transform .7s cubic-bezier(0.16,1,0.3,1);
+  pointer-events: none;
+}
+.hsp-slide.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.hsp-slide.deal { padding-top: 16px; }
+.hsp-photo {
+  width: 130px; height: 130px; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+  border: 2px solid rgba(255,255,255,0.18);
+  margin-bottom: 14px;
+  position: relative;
+}
+.hsp-photo img { width: 100%; height: 100%; object-fit: cover; opacity: .95; transform: scale(1.05); }
+.hsp-photo::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(to top, rgba(2,6,23,0.55), transparent 55%);
+}
+.hsp-badge-row { display:flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
+.hsp-badge {
+  font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  padding: 6px 10px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.82);
+}
+.hsp-badge.green { border-color: rgba(52,211,153,0.28); background: rgba(16,185,129,0.14); color: rgba(236,253,245,0.92); }
+.hsp-deal-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.92); text-align: center; max-width: 310px; line-height: 1.35; }
+.hsp-deal-metric { margin-top: 10px; display:flex; align-items: baseline; justify-content: center; gap: 8px; }
+.hsp-deal-metric .pct { font-size: 44px; font-weight: 900; color: rgba(252,211,77,0.95); letter-spacing: -0.04em; }
+.hsp-deal-metric .muted { font-size: 12px; color: rgba(255,255,255,0.55); }
+.hsp-bar { width: 100%; max-width: 320px; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.10); overflow:hidden; margin-top: 12px; }
+.hsp-bar > i { display:block; height:100%; width: 63.4%; border-radius: 999px; background: linear-gradient(90deg, rgba(96,165,250,1), rgba(56,189,248,1)); }
+.hsp-dots { display:flex; justify-content:center; gap: 6px; margin: 14px 0 0; }
+.hsp-dots button {
+  width: 18px; height: 4px; border-radius: 99px; border: 0;
+  background: rgba(255,255,255,0.22);
+  cursor: pointer;
+}
+.hsp-dots button.active { background: rgba(255,255,255,0.92); }
+.card-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.live-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.live-dot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #22C55E; box-shadow: 0 0 8px #22C55E; display: block; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.card-chips { display: flex; gap: 6px; }
+.chip {
+  font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 100px;
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.1);
+}
+.chip.blue { background: rgba(27,79,216,0.3); color: #93B4FF; border-color: rgba(27,79,216,0.4); }
+.card-center { text-align: center; padding: 20px 0 28px; }
+.card-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+.card-amount { font-size: 48px; font-weight: 800; color: white; letter-spacing: -.03em; line-height: 1; }
+.card-amount span { font-size: 22px; font-weight: 600; opacity: .6; display: block; margin-top: 6px; letter-spacing: 0; }
+.card-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px; padding: 13px 24px; color: white; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background .2s;
+}
+.card-cta:hover { background: rgba(255,255,255,0.14); }
+.card-dots { display: flex; justify-content: center; gap: 5px; margin-top: 18px; }
+.card-dots span { width: 20px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.2); }
+.card-dots span.active { background: white; }
+
+/* ─── STATS STRIP ─────────────────────────────────────── */
+.stats-strip {
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: repeat(4,1fr);
+  background: var(--white);
+}
+.stat-item {
+  padding: 36px clamp(24px,5vw,60px);
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: clamp(36px,4vw,52px); font-weight: 800; letter-spacing: -.04em; color: var(--text); line-height: 1; margin-bottom: 6px; }
+.stat-label { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+/* ─── PAIN SECTION ─────────────────────────────────────── */
+.pain {
+  background: var(--navy);
+  padding: 100px clamp(24px,5vw,80px);
+}
+.pain-inner { max-width: var(--max); margin: 0 auto; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; display: block; }
+.pain h2 { font-size: clamp(30px,4vw,52px); font-weight: 800; color: white; line-height: 1.1; letter-spacing: -.03em; max-width: 640px; margin-bottom: 16px; }
+.pain h2 em { font-style: italic; color: rgba(255,255,255,0.45); }
+.pain-sub { font-size: 16px; color: rgba(255,255,255,0.45); max-width: 520px; line-height: 1.65; margin-bottom: 64px; }
+.pain-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
+.pain-card { background: rgba(255,255,255,0.03); padding: 36px 28px; transition: background .2s; }
+.pain-card:hover { background: rgba(255,255,255,0.06); }
+.pain-num { font-size: 72px; font-weight: 800; color: rgba(255,255,255,0.06); letter-spacing: -.05em; line-height: 1; margin-bottom: 16px; }
+.pain-title { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 12px; }
+.pain-text { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.45); }
+.pain-footer { margin-top: 48px; text-align: center; font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.35); }
+.pain-footer strong { color: rgba(255,255,255,0.85); }
+
+/* ─── CALCULATOR ─────────────────────────────────────────── */
+.calc-section { background: var(--off-white); padding: 100px clamp(24px,5vw,80px); }
+.calc-inner { max-width: var(--max); margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 56px; }
+.section-header h2 { font-size: clamp(28px,4vw,48px); font-weight: 800; letter-spacing: -.03em; margin-bottom: 12px; color: var(--text); }
+.section-header p { font-size: 15px; color: var(--muted); max-width: 500px; margin: 0 auto; line-height: 1.65; }
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.calc-panel {
+  background: white; border: 1px solid var(--border); border-radius: 20px; padding: 32px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+}
+.calc-panel-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.calc-amount { font-size: 40px; font-weight: 800; letter-spacing: -.04em; color: var(--text); margin-bottom: 4px; }
+.calc-range-info { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  background: var(--blue); border-radius: 2px; outline: none; margin-bottom: 28px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--blue); border: 3px solid white; box-shadow: 0 2px 8px rgba(27,79,216,0.35); cursor: pointer;
+}
+.calc-photo {
+  border-radius: 12px; overflow: hidden; position: relative; background: #1a2540;
+  margin-top: 22px;
+  flex: 1;
+  min-height: 180px;
+}
+.calc-photo img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; }
+.calc-photo .calc-shot {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.04);
+  transition: opacity .9s cubic-bezier(0.16,1,0.3,1), transform 1.2s cubic-bezier(0.16,1,0.3,1);
+  will-change: opacity, transform;
+}
+.calc-photo .calc-shot.active { opacity: 0.9; transform: scale(1.0); }
+.calc-photo .calc-photo-cap { z-index: 3; }
+.calc-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(59,130,246,0.18), transparent 55%);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 2;
+}
+.calc-photo-cap {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  padding: 20px 14px 12px; font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 500;
+}
+.calc-photo-placeholder {
+  height: 180px; background: linear-gradient(135deg, #1B2F52, #0F2040);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.3); font-size: 13px; font-weight: 500;
+}
+.calc-results h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 20px; }
+.result-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 13px; }
+.result-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+.result-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+.result-text strong { font-weight: 700; }
+.proj-box { background: var(--off-white); border-radius: 12px; padding: 20px; margin-top: 20px; }
+.proj-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.proj-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.proj-item { }
+.proj-item-label { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.proj-item-value { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -.02em; }
+.proj-item.highlight .proj-item-value { color: var(--blue); }
+.proj-item.highlight .proj-item-label { color: var(--blue); }
+.calc-disclaimer { font-size: 11px; color: var(--muted); margin: 14px 0; line-height: 1.5; }
+.btn-primary {
+  width: 100%; padding: 15px; background: var(--green); color: white;
+  font-weight: 700; font-size: 15px; border: none; border-radius: 12px; cursor: pointer;
+  transition: background .2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary:hover { background: var(--green-hover); }
+
+/* ─── TIMELINE ─────────────────────────────────────────── */
+.timeline-section { background: white; padding: 100px clamp(24px,5vw,80px); }
+.timeline-inner { max-width: var(--max); margin: 0 auto; }
+.timeline-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 80px; align-items: end; }
+.timeline-header h2 { font-size: clamp(28px,4vw,48px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+.timeline-header h2 em { font-style: italic; color: var(--blue); }
+.timeline-header p { font-size: 15px; color: var(--muted); line-height: 1.65; }
+.timeline-steps { position: relative; }
+.timeline-line {
+  position: absolute; left: 28px; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, var(--blue) 0%, var(--blue) 80%, transparent 100%);
+}
+.timeline-step { display: grid; grid-template-columns: 56px 1fr; gap: 32px; margin-bottom: 0; position: relative; }
+.timeline-step + .timeline-step { margin-top: 0; }
+.step-node {
+  display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;
+}
+.step-circle {
+  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  background: white; border: 2px solid var(--border); color: var(--muted);
+  font-size: 18px; transition: all .3s; flex-shrink: 0;
+}
+.step-circle.done { background: var(--blue); border-color: var(--blue); color: white; }
+.step-circle svg { width: 20px; height: 20px; }
+.step-body { padding: 14px 0 48px; }
+.step-day { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
+.step-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -.02em; }
+.step-text { font-size: 14px; line-height: 1.7; color: var(--muted); max-width: 540px; }
+.timeline-disclaimer { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+
+/* ─── OPERATORS ─────────────────────────────────────────── */
+.operators { background: var(--blue); padding: 100px clamp(24px,5vw,80px); position: relative; overflow: hidden; }
+.operators::before {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+}
+.operators-inner { max-width: var(--max); margin: 0 auto; position: relative; z-index: 1; }
+.operators-top { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 56px; align-items: start; }
+.operators-top h2 { font-size: clamp(30px,4vw,52px); font-weight: 800; color: white; letter-spacing: -.03em; line-height: 1.08; }
+.operators-top-right { padding-top: 8px; }
+.operators-top p { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.6); margin-bottom: 20px; }
+.operators-highlight {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 18px 20px; font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.85);
+}
+.operators-highlight strong { color: white; }
+.op-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 20px; }
+.op-card {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px; padding: 28px 24px; position: relative; transition: background .2s;
+}
+.op-card:hover { background: rgba(255,255,255,0.12); }
+.op-num {
+  position: absolute; top: 20px; right: 20px; font-size: 32px; font-weight: 800;
+  color: rgba(255,255,255,0.08); letter-spacing: -.04em; line-height: 1;
+}
+.op-name { font-size: 17px; font-weight: 800; color: white; margin-bottom: 10px; }
+.op-text { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.55); }
+.op-footer {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 18px 24px; font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6;
+}
+
+/* ─── REAL NUMBERS ─────────────────────────────────────── */
+.numbers-section { background: var(--navy); padding: 100px clamp(24px,5vw,80px); }
+.numbers-inner { max-width: var(--max); margin: 0 auto; }
+.numbers-header { margin-bottom: 64px; }
+.numbers-header h2 { font-size: clamp(30px,4vw,52px); font-weight: 800; color: white; letter-spacing: -.03em; line-height: 1.1; margin-bottom: 12px; }
+.numbers-header h2 em { font-style: italic; color: rgba(255,255,255,0.35); }
+.numbers-header p { font-size: 15px; color: rgba(255,255,255,0.45); max-width: 520px; line-height: 1.65; }
+.numbers-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+.number-item { background: rgba(255,255,255,0.03); padding: 40px 32px; transition: background .2s; }
+.number-item:hover { background: rgba(255,255,255,0.06); }
+.number-cat { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 12px; }
+.number-val { font-size: clamp(36px,4vw,60px); font-weight: 800; color: white; letter-spacing: -.04em; line-height: 1; margin-bottom: 8px; }
+.number-tag { font-size: 12px; color: var(--blue); font-weight: 600; }
+.number-tag.blue { color: #93B4FF; }
+.numbers-disclaimer { text-align: center; font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 32px; }
+
+/* ─── FEES ─────────────────────────────────────────────── */
+.fees-section { background: white; padding: 100px clamp(24px,5vw,80px); }
+.fees-inner { max-width: var(--max); margin: 0 auto; }
+.fees-table { width: 100%; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-top: 48px; }
+.fees-table thead tr { background: var(--navy); }
+.fees-table th { padding: 16px 24px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.fees-table tbody tr { border-top: 1px solid var(--border); transition: background .15s; }
+.fees-table tbody tr:hover { background: var(--off-white); }
+.fees-table td { padding: 18px 24px; font-size: 14px; color: var(--text); }
+.fees-table td:first-child { font-weight: 700; }
+.fees-table td:last-child { font-weight: 600; color: var(--blue); }
+.fees-note { text-align: center; font-size: 13px; color: var(--muted); max-width: 560px; margin: 32px auto 0; line-height: 1.65; }
+
+/* ─── TAX ─────────────────────────────────────────────── */
+.tax-section { background: var(--off-white); padding: 100px clamp(24px,5vw,80px); }
+.tax-inner { max-width: var(--max); margin: 0 auto; }
+.tax-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; margin-bottom: 40px; }
+.tax-card {
+  background: white; border: 1px solid var(--border); border-radius: 16px;
+  padding: 28px 24px; border-top: 3px solid var(--blue);
+}
+.tax-title { font-size: 16px; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+.tax-text { font-size: 14px; line-height: 1.7; color: var(--muted); }
+.tax-form-box {
+  background: white; border: 1px solid var(--border); border-radius: 20px;
+  padding: 40px; max-width: 560px; margin: 0 auto; text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+.tax-form-box h3 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -.02em; }
+.tax-form-box p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.55; }
+.form-field { text-align: left; margin-bottom: 14px; }
+.form-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.form-input {
+  width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: var(--font); font-size: 14px; color: var(--text); outline: none; transition: border-color .2s;
+}
+.form-input:focus { border-color: var(--blue); }
+.btn-form {
+  width: 100%; padding: 14px; background: var(--blue); color: white;
+  font-weight: 700; font-size: 15px; border: none; border-radius: 10px; cursor: pointer;
+  transition: background .2s; margin-top: 6px;
+}
+.btn-form:hover { background: var(--blue-hover); }
+
+/* ─── FAQ ─────────────────────────────────────────────── */
+.faq-section { background: white; padding: 100px clamp(24px,5vw,80px); }
+.faq-inner { max-width: 760px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 0; cursor: pointer; gap: 16px;
+}
+.faq-q-text { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.faq-icon {
+  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border);
+  display: grid; place-items: center; flex-shrink: 0; transition: all .25s;
+  color: var(--muted);
+}
+.faq-item.open .faq-icon { background: var(--blue); border-color: var(--blue); color: white; transform: rotate(45deg); }
+.faq-a { display: none; padding: 0 0 22px; }
+.faq-item.open .faq-a { display: block; }
+.faq-a-text { font-size: 15px; line-height: 1.75; color: var(--muted); }
+
+/* ─── CTA ─────────────────────────────────────────────── */
+.cta-section { background: var(--navy); padding: 120px clamp(24px,5vw,80px); position: relative; overflow: hidden; }
+.cta-section::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(27,79,216,0.2) 0%, transparent 65%);
+}
+.cta-inner { max-width: 700px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.cta-eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; background: rgba(27,79,216,0.15); padding: 6px 14px; border-radius: 100px; border: 1px solid rgba(27,79,216,0.25); }
+.cta-section h2 { font-size: clamp(32px,5vw,60px); font-weight: 800; color: white; letter-spacing: -.03em; line-height: 1.1; margin-bottom: 16px; }
+.cta-section p { font-size: 16px; color: rgba(255,255,255,0.5); margin-bottom: 40px; line-height: 1.65; }
+.cta-btns { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.btn-cta-ghost {
+  font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px; padding: 13px 24px; cursor: pointer; text-decoration: none; transition: all .2s;
+}
+.btn-cta-ghost:hover { background: rgba(255,255,255,0.14); color: white; }
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+  background: white; border-top: 1px solid var(--border);
+  padding: 48px clamp(24px,5vw,80px);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px;
+  max-width: calc(var(--max) + 160px); margin: 0 auto;
+}
+.footer-brand p { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.6; max-width: 220px; }
+.footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.footer-col a { display: block; font-size: 14px; color: var(--text); text-decoration: none; margin-bottom: 10px; opacity: .8; transition: opacity .2s; }
+.footer-col a:hover { opacity: 1; }
+.footer-col p { font-size: 14px; color: var(--text); margin-bottom: 10px; }
+
+/* ─── STICKY WA ─────────────────────────────────────────── */
+.sticky-wa {
+  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--green); color: white; font-weight: 600; font-size: 14px;
+  border: none; border-radius: 100px; padding: 13px 20px; cursor: pointer;
+  box-shadow: 0 8px 32px rgba(5,150,105,0.4); text-decoration: none; transition: all .2s;
+}
+.sticky-wa:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(5,150,105,0.5); }
+.sticky-wa svg { width: 18px; height: 18px; }
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(-48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lineGrow {
+  from { transform: scaleY(0); transform-origin: top; }
+  to   { transform: scaleY(1); transform-origin: top; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Base state — hidden before scroll trigger */
+[data-a] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+}
+[data-a="right"] { transform: translateX(48px); }
+[data-a="left"]  { transform: translateX(-48px); }
+[data-a="up"]    { transform: translateY(28px); }
+[data-a="scale"] { transform: scale(0.94); }
+[data-a].visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Stagger delays */
+[data-delay="1"] { transition-delay: 0.08s; }
+[data-delay="2"] { transition-delay: 0.16s; }
+[data-delay="3"] { transition-delay: 0.24s; }
+[data-delay="4"] { transition-delay: 0.32s; }
+[data-delay="5"] { transition-delay: 0.40s; }
+
+/* Hero entrance */
+.hero-left-wrap > * { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+.hero-left-wrap > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-left-wrap > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-left-wrap > *:nth-child(3) { animation-delay: 0.25s; }
+.hero-left-wrap > *:nth-child(4) { animation-delay: 0.35s; }
+.hero-card-wrap { animation: slideRight 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.hero-card { animation: float 6s ease-in-out 1s infinite; }
+
+/* Timeline line */
+.timeline-line { animation: lineGrow 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
+
+/* Nav logo subtle pulse on load */
+.nav-logo-icon { animation: fadeIn 0.4s ease both; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-card { max-width: 400px; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(2) { border-right: none; }
+  .stat-item:nth-child(3) { border-top: 1px solid var(--border); }
+  .pain-grid { grid-template-columns: 1fr; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .timeline-header { grid-template-columns: 1fr; gap: 20px; }
+  .operators-top { grid-template-columns: 1fr; }
+  .op-grid { grid-template-columns: 1fr; }
+  .numbers-grid { grid-template-columns: 1fr 1fr; }
+  .tax-grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">HSG</div>
+    HSG Investment
+  </a>
+  <div class="nav-links">
+    <a href="#proceso">Llamada → renta</a>
+    <a href="#operadores">Operadores</a>
+    <a href="#faq">FAQ</a>
+    <a href="#operadores">HSG Capital</a>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn active">ES</button>
+    <button class="lang-btn">EN</button>
+    <a href="https://wa.me/1234567890" class="btn-wa">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.131.558 4.13 1.535 5.865L.057 23.54a.5.5 0 00.608.633l5.898-1.547A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.032-1.384l-.36-.213-3.732.979 1-3.64-.235-.374A9.818 9.818 0 012.182 12C2.182 6.573 6.573 2.182 12 2.182c5.427 0 9.818 4.391 9.818 9.818 0 5.427-4.391 9.818-9.818 9.818z"/></svg>
+      Hablar por WhatsApp
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+  <div class="hero-left-wrap">
+    <div class="hero-eyebrow">HSG Investment <span>•</span> Real estate <span>•</span> USD income</div>
+    <h1>Construye tu portafolio de propiedades en EE.UU.</h1>
+    <p class="hero-sub">Tú eres dueño. Nosotros operamos todo lo demás. Acceso para extranjeros y no residentes desde $50,000 USD.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/1234567890" class="btn-wa" style="font-size:15px;padding:12px 22px;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.131.558 4.13 1.535 5.865L.057 23.54a.5.5 0 00.608.633l5.898-1.547A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.032-1.384l-.36-.213-3.732.979 1-3.64-.235-.374A9.818 9.818 0 012.182 12C2.182 6.573 6.573 2.182 12 2.182c5.427 0 9.818 4.391 9.818 9.818 0 5.427-4.391 9.818-9.818 9.818z"/></svg>
+        Hablar por WhatsApp
+      </a>
+      <a href="#calculadora" class="btn-ghost">Ver calculadora →</a>
+    </div>
+  </div>
+  <!-- /hero-left-wrap -->
+  <div class="hero-card-wrap">
+  <div class="hero-card">
+    <div class="hsp-orb-a"></div>
+    <div class="hsp-orb-b"></div>
+    <div class="hsp-grid"></div>
+
+    <div class="hsp-top">
+      <div class="hsp-live"><i></i>EN VIVO</div>
+      <div class="hsp-chips">
+        <div class="hsp-chip">7%+ anual</div>
+        <div class="hsp-chip green">+$356 USD</div>
+        <div class="hsp-chip amber">63.4% financiado</div>
+      </div>
+    </div>
+
+    <div class="hsp-body">
+      <div class="hsp-slides" data-hsp-slides>
+        <!-- Slide 1: Yield -->
+        <div class="hsp-slide active" data-hsp-slide>
+          <div class="hsp-kicker">Rentabilidad</div>
+          <div class="hsp-metric">7%+</div>
+          <div class="hsp-sub">Chicago, IL · USD</div>
+          <div class="hsp-mini">
+            <div>2022<b>5.8%</b></div>
+            <div>2023<b>6.4%</b></div>
+            <div>2024<b style="color:rgba(110,231,183,0.95)">7.2%</b></div>
+          </div>
+        </div>
+
+        <!-- Slide 2: Deal (with house) -->
+        <div class="hsp-slide deal" data-hsp-slide>
+          <div class="hsp-photo">
+            <img src="/image.png" alt="Propiedad tipo cartera en Chicago, Illinois">
+          </div>
+          <div class="hsp-badge-row">
+            <span class="hsp-badge green">Disponible</span>
+            <span class="hsp-badge">Operación activa</span>
+          </div>
+          <div class="hsp-deal-title">10214 Van Vlissingen Rd</div>
+          <div class="hsp-deal-metric">
+            <span class="pct">63.4%</span>
+            <span class="muted">financiado</span>
+          </div>
+          <div class="hsp-bar"><i></i></div>
+        </div>
+
+        <!-- Slide 3: Entry ticket -->
+        <div class="hsp-slide" data-hsp-slide>
+          <div class="hsp-kicker">Ticket de entrada</div>
+          <div class="hsp-metric">US$ 50.000</div>
+          <div class="hsp-sub">Mínimo · Chicago, IL · USD</div>
+          <div class="hsp-mini">
+            <div>2022<b>5.8%</b></div>
+            <div>2023<b>6.4%</b></div>
+            <div>2024<b style="color:rgba(110,231,183,0.95)">7.2%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hsp-dots" aria-label="Hero slides">
+        <button type="button" class="active" data-hsp-dot aria-label="Slide 1"></button>
+        <button type="button" data-hsp-dot aria-label="Slide 2"></button>
+        <button type="button" data-hsp-dot aria-label="Slide 3"></button>
+      </div>
+    </div>
+
+    <div class="hsp-cta"><span>●</span> Mercado activo →</div>
+  </div>
+  </div><!-- /hero-card-wrap -->
+</div><!-- /hero-inner -->
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item" data-a="up" data-delay="1">
+    <div class="stat-num" data-counter="500" data-suffix="+">500+</div>
+    <div class="stat-label">propiedades en USA</div>
+  </div>
+  <div class="stat-item" data-a="up" data-delay="2">
+    <div class="stat-num" data-counter="18000" data-suffix="+" data-format="comma">18,000+</div>
+    <div class="stat-label">unidades en LATAM</div>
+  </div>
+  <div class="stat-item" data-a="up" data-delay="3">
+    <div class="stat-num" data-counter="12">12</div>
+    <div class="stat-label">años operando</div>
+  </div>
+  <div class="stat-item" data-a="up" data-delay="4">
+    <div class="stat-num" data-counter="100" data-suffix="%">100%</div>
+    <div class="stat-label">operación en español</div>
+  </div>
+</div>
+
+<!-- PAIN SECTION -->
+<section class="pain" id="problema">
+  <div class="pain-inner">
+    <span class="section-label">El problema</span>
+    <h2>Invertir en USA desde Latinoamérica<br>hoy es <em>complicado.</em></h2>
+    <p class="pain-sub">Si tu dinero depende de terceros que no controlas y de reglas que nadie te explicó, no es inversión: es estrés.</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-num">01</div>
+        <div class="pain-title">El broker que vende y desaparece</div>
+        <p class="pain-text">Compras una propiedad por internet, firmas papeles que no entiendes del todo, y al mes siguiente nadie responde el teléfono. El broker cobró su comisión y se fue al siguiente cliente.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">02</div>
+        <div class="pain-title">Las sorpresas fiscales</div>
+        <p class="pain-text">Nadie te explica el FIRPTA, el estate tax, ni cómo se declara renta como non-resident alien. Lo descubres seis meses después cuando llega una carta del IRS.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">03</div>
+        <div class="pain-title">Operar a 4,000 km</div>
+        <p class="pain-text">El inquilino no paga, el techo se filtra, el property manager no contesta. Tu inversión depende de gente que no controlas desde Bogotá, México DF, o Buenos Aires.</p>
+      </div>
+    </div>
+    <p class="pain-footer">Por eso construimos <strong>HSG Capital Investment.</strong></p>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calc-section" id="calculadora">
+  <div class="calc-inner">
+    <div class="section-header">
+      <span class="section-label" style="display:block;margin-bottom:12px;">Calculadora</span>
+      <h2>Calcula tu portafolio en 30 segundos.</h2>
+      <p>Basado en rangos conservadores de un portafolio operando en Georgia. No son promesas: son estimaciones para conversar con contexto.</p>
+    </div>
+    <div class="calc-grid">
+      <div class="calc-panel">
+        <div class="calc-panel-label">Capital disponible</div>
+        <div class="calc-amount" id="calc-display">US$ 400.000</div>
+        <div class="calc-range-info">Rango: $150,000 – $1,500,000 · pasos de $50,000</div>
+        <input type="range" id="calc-slider" min="150000" max="1500000" step="50000" value="400000" oninput="updateCalc()">
+        <div class="calc-photo">
+          <img class="calc-shot active" src="/image.png" alt="Ejemplo de activo en cartera — operación real, EE. UU.">
+          <img class="calc-shot" src="/property-2-D4LPmw2A.jpg" alt="Ejemplo de activo en cartera — operación real, EE. UU.">
+          <img class="calc-shot" src="/property-3-C-VAc_JJ.jpg" alt="Ejemplo de activo en cartera — operación real, EE. UU.">
+          <div class="calc-photo-cap">Ejemplo de activo en cartera — operación real, EE. UU.</div>
+        </div>
+      </div>
+      <div class="calc-panel calc-results">
+        <h3 id="calc-title">Con US$ 400.000 puedes construir un portafolio de:</h3>
+        <div id="calc-results-list">
+          <div class="result-item"><div class="result-dot"></div><div class="result-text"><strong id="r-props">1 propiedad</strong></div></div>
+          <div class="result-item"><div class="result-dot"></div><div class="result-text"><strong id="r-rent">~US$ 1.170/mes</strong> en renta neta proyectada</div></div>
+          <div class="result-item"><div class="result-dot"></div><div class="result-text"><strong id="r-coc">3.5%</strong> cash-on-cash anual estimado</div></div>
+          <div class="result-item"><div class="result-dot"></div><div class="result-text">Propiedades operadas y rentando en <strong>60–90 días</strong></div></div>
+        </div>
+        <div class="proj-box">
+          <div class="proj-label">Proyección a 5 años</div>
+          <div class="proj-grid">
+            <div class="proj-item">
+              <div class="proj-item-label">Cash Flow Acumulado</div>
+              <div class="proj-item-value" id="r-cf5">US$ 75.000</div>
+            </div>
+            <div class="proj-item">
+              <div class="proj-item-label">Apreciación de Equity</div>
+              <div class="proj-item-value" id="r-eq5">US$ 43.000</div>
+            </div>
+            <div class="proj-item highlight">
+              <div class="proj-item-label">Retorno Total</div>
+              <div class="proj-item-value" id="r-tot5">US$ 118.000 (29%)</div>
+            </div>
+          </div>
+        </div>
+        <p class="calc-disclaimer">Estimaciones basadas en data operativa. Tu resultado real puede variar.</p>
+        <button class="btn-primary">Quiero hablar con alguien sobre estos números →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section" id="proceso">
+  <div class="timeline-inner">
+    <div class="timeline-header">
+      <div>
+        <span class="section-label" style="color:var(--blue);">Ritmo operativo</span>
+        <h2>De primera llamada a tu primera renta cobrada en <em>60–90 días.</em></h2>
+      </div>
+      <p>Un solo hilo: legal, capital y operación en terreno. Los plazos finales dependen del activo, tu banco y documentación — aquí ves el ritmo que apuntamos.</p>
+    </div>
+    <div class="timeline-steps">
+      <div class="timeline-line"></div>
+      <div class="timeline-step">
+        <div class="step-node">
+          <div class="step-circle done">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 011 2.22 2 2 0 012.96 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0121.28 14l.64 2.92z"/></svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="step-day">Día 0</div>
+          <div class="step-title">Conversación clara</div>
+          <p class="step-text">Capital, objetivo y restricciones. Te explicamos cómo encaja el modelo HSG, qué pide un socio típico y qué NO prometemos.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-node">
+          <div class="step-circle done">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="step-day">Días 1–7</div>
+          <div class="step-title">Propuesta alineada</div>
+          <p class="step-text">Opciones de cartera según tu ticket, números sensibles y escenarios. Sin humo: lo que ves es lo que usamos para decidir.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-node">
+          <div class="step-circle done">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="step-day">Días 8–45</div>
+          <div class="step-title">Cierre y estructura</div>
+          <p class="step-text">Firma, vehículo acordado (p. ej. LLC), transferencias coordinadas y contratos listos. Te guiamos en cada paso para que no pierdas semanas en trámites evitables.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-node">
+          <div class="step-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="step-day">En paralelo</div>
+          <div class="step-title">Activo en marcha</div>
+          <p class="step-text">Rehabilitación si aplica, listing y property management activo. Objetivo: inquilino calificado y cobranza funcionando.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="step-node">
+          <div class="step-circle done">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+        </div>
+        <div class="step-body" style="padding-bottom:0">
+          <div class="step-day">60–90 días</div>
+          <div class="step-title">Primera renta en tu cuenta</div>
+          <p class="step-text">Renta neta en dólares, liquidaciones legibles y un equipo que responde. Ahí empieza el flujo recurrente.</p>
+        </div>
+      </div>
+    </div>
+    <p class="timeline-disclaimer">Plazos orientativos basados en operación típica; cada caso se confirma por escrito con tu deal team.</p>
+  </div>
+</section>
+
+<!-- OPERATORS -->
+<section class="operators" id="operadores">
+  <div class="operators-inner">
+    <div class="operators-top">
+      <h2>No somos un broker con landing bonita.<br>Somos operadores.</h2>
+      <div class="operators-top-right">
+        <p>HSG Capital Investment es la unidad de inversión del ecosistema HSG, un grupo de empresas que opera real estate desde 2014 a ambos lados de la frontera.</p>
+        <div class="operators-highlight">
+          <strong>Cuando inviertes con nosotros, no contratas a un intermediario.</strong> Conectas con la misma operación que ya administra:
+        </div>
+      </div>
+    </div>
+    <div class="op-grid">
+      <div class="op-card">
+        <div class="op-num">01</div>
+        <div class="op-name">B4I Management</div>
+        <p class="op-text">Property Management en Georgia, USA. Más de 500 propiedades bajo administración.</p>
+      </div>
+      <div class="op-card">
+        <div class="op-num">02</div>
+        <div class="op-name">Orange Hammer</div>
+        <p class="op-text">Facility Management en Georgia, USA. Renovaciones, mantenimiento preventivo y correctivo.</p>
+      </div>
+      <div class="op-card">
+        <div class="op-num">03</div>
+        <div class="op-name">HSG Synergy</div>
+        <p class="op-text">Operación corporativa. 18,000+ unidades administradas en Latinoamérica desde 2014.</p>
+      </div>
+    </div>
+    <div class="op-footer">Esto significa que cuando tu propiedad necesita algo, no llamamos a un tercero. Lo resolvemos con nuestro equipo, en nuestro proceso, con nuestros estándares.</div>
+  </div>
+</section>
+
+<!-- REAL NUMBERS -->
+<section class="numbers-section">
+  <div class="numbers-inner">
+    <div class="numbers-header">
+      <h2>Estos son números reales.<br><em>No proyecciones.</em></h2>
+      <p>Performance del portafolio operado en Georgia durante los últimos 12 meses. Anonimizado a nivel de propiedad, pero los agregados son la realidad.</p>
+    </div>
+    <div class="numbers-grid">
+      <div class="number-item">
+        <div class="number-cat">Renta promedio</div>
+        <div class="number-val">$1,820</div>
+        <div class="number-tag blue">USD / mes · datos reales</div>
+      </div>
+      <div class="number-item">
+        <div class="number-cat">Cap rate promedio</div>
+        <div class="number-val">6.2%</div>
+        <div class="number-tag blue">Datos reales agregados</div>
+      </div>
+      <div class="number-item">
+        <div class="number-cat">Cobranza a tiempo</div>
+        <div class="number-val">94%</div>
+        <div class="number-tag blue">Datos reales agregados</div>
+      </div>
+      <div class="number-item">
+        <div class="number-cat">Días para re-rentar</div>
+        <div class="number-val">22</div>
+        <div class="number-tag blue">días · datos reales</div>
+      </div>
+    </div>
+    <p class="numbers-disclaimer">Performance pasada no garantiza resultados futuros. Cada propiedad varía.</p>
+  </div>
+</section>
+
+<!-- FEES -->
+<section class="fees-section">
+  <div class="fees-inner">
+    <div class="section-header">
+      <h2>Estos son todos nuestros fees.<br>No hay otros.</h2>
+    </div>
+    <table class="fees-table">
+      <thead>
+        <tr>
+          <th>Fee</th>
+          <th>Cuándo</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Acquisition fee</td><td>Al cierre de cada propiedad</td><td>2.5% del precio de compra</td></tr>
+        <tr><td>Setup de entidad</td><td>Una vez</td><td>$1,500 — incluye Wyoming LLC + coordinación ITIN</td></tr>
+        <tr><td>PM setup / transition</td><td>Por propiedad</td><td>$500</td></tr>
+        <tr><td>PM mensual</td><td>Mientras administramos</td><td>10% de la renta cobrada</td></tr>
+        <tr><td>Lease renewal</td><td>Cuando se renueva contrato</td><td>$500</td></tr>
+        <tr><td>Maintenance coordination</td><td>Cuando aplique</td><td>15% de markup sobre costo de Orange Hammer</td></tr>
+      </tbody>
+    </table>
+    <p class="fees-note">No cobramos por la llamada. No cobramos por el portafolio diseñado. No cobramos por el acceso al portal. Si no compras, no nos debes nada.</p>
+  </div>
+</section>
+
+<!-- TAX -->
+<section class="tax-section">
+  <div class="tax-inner">
+    <div class="section-header">
+      <h2>Los impuestos que nadie te explica.</h2>
+      <p>Como inversionista latinoamericano sin residencia en USA (non-resident alien), tienes obligaciones fiscales específicas. Te las explicamos antes de comprar — no después.</p>
+    </div>
+    <div class="tax-grid">
+      <div class="tax-card">
+        <div class="tax-title">Income tax</div>
+        <p class="tax-text">Pagas impuesto federal sobre la renta neta después de gastos, depreciación e intereses. Filing anual obligatorio.</p>
+      </div>
+      <div class="tax-card">
+        <div class="tax-title">FIRPTA</div>
+        <p class="tax-text">Cuando vendes, el comprador retiene 15% del precio bruto y lo envía al IRS. Es un withholding, no un impuesto adicional. Hay que planearlo.</p>
+      </div>
+      <div class="tax-card">
+        <div class="tax-title">Estate tax</div>
+        <p class="tax-text">Si fallecieras siendo dueño de propiedades en USA, el IRS puede cobrar hasta 40% sobre activos superiores a $60,000. Esto se mitiga con la estructura legal correcta.</p>
+      </div>
+    </div>
+    <div class="tax-form-box">
+      <h3>Descarga el cheat sheet fiscal completo</h3>
+      <p>Te enviamos la guía de obligaciones fiscales para non-resident aliens inversionistas en USA.</p>
+      <div class="form-field">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" type="text" placeholder="Tu nombre">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="tu@email.com">
+      </div>
+      <button class="btn-form">Descargar</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="faq-inner">
+    <div class="section-header" style="text-align:left;margin-bottom:48px;">
+      <h2>Preguntas frecuentes</h2>
+    </div>
+    <div id="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Quién puede invertir con HSG?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">Cualquier persona extranjera o no residente en USA puede invertir. No necesitas visado, número de seguro social ni residencia. Nos especializamos en estructurar operaciones para latinoamericanos.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cuál es la inversión mínima?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">La inversión mínima es de $50,000 USD. Aunque la calculadora parte de $150,000, en ciertos activos podemos estructurar coinversiones desde $50,000. En la primera llamada determinamos si tu capital encaja con los activos disponibles.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cómo recibo mi renta?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">La renta neta se deposita mensualmente en tu cuenta bancaria de EE.UU. (generalmente bajo la LLC). Recibes un estado de cuenta con detalle de ingresos, gastos y retención. Todo documentado y auditable.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Qué diferencia a HSG de un broker con "bonita landing"?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">HSG opera más de 500 propiedades en Georgia a través de B4I Management y Orange Hammer. No somos intermediarios: somos el operador. Cuando tu propiedad necesita algo, lo resuelve el mismo equipo que administra el resto del portafolio, no un tercero contratado.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Los números de performance son reales?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">Sí. Son datos operativos del portafolio actual anonimizados a nivel de propiedad. Están basados en registros contables reales. No son proyecciones ni estimaciones de mercado — son números de lo que ya está operando.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Dónde veo todos los fees?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">En la sección de Fees de esta misma página están todos publicados. No hay fees ocultos, no hay cobros por consulta, y no hay sorpresas en el cierre. Si detectas algún costo no listado, nos lo señalas y lo corregimos.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Qué impuestos debo tener en mente como inversionista latino sin residencia en USA?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">Income tax federal, FIRPTA al momento de venta, y estate tax si el activo supera $60,000 sin estructura legal. La buena noticia: con una LLC en Wyoming bien configurada, los tres se mitigan significativamente. Te explicamos cómo antes de comprar.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Qué pasa si el inquilino no paga o hay vacancia?</span>
+          <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="faq-a"><p class="faq-a-text">Nuestra tasa de cobranza es del 94% y el tiempo promedio de re-renta es 22 días. En caso de vacancia, activamos el proceso de listing inmediatamente. Recibes información clara sobre el estatus y el plan de acción — sin silencio radio.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <span class="cta-eyebrow" data-a="up">HSG Capital Investment</span>
+    <h2 data-a="up" data-delay="1">¿Listo para construir tu portafolio en EE. UU.?</h2>
+    <p data-a="up" data-delay="2">Misma operación, mismos fees publicados, mismos estándares. Hablemos por WhatsApp y vemos si encajas con el modelo.</p>
+    <div class="cta-btns" data-a="up" data-delay="3">
+      <a href="https://wa.me/1234567890" class="btn-wa" style="font-size:15px;padding:13px 24px;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.131.558 4.13 1.535 5.865L.057 23.54a.5.5 0 00.608.633l5.898-1.547A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.032-1.384l-.36-.213-3.732.979 1-3.64-.235-.374A9.818 9.818 0 012.182 12C2.182 6.573 6.573 2.182 12 2.182c5.427 0 9.818 4.391 9.818 9.818 0 5.427-4.391 9.818-9.818 9.818z"/></svg>
+        Hablar por WhatsApp
+      </a>
+      <a href="#calculadora" class="btn-cta-ghost">Ver calculadora</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="nav-logo" style="display:flex;align-items:center;gap:8px;">
+      <div class="nav-logo-icon">HSG</div>
+      <span style="font-weight:700;font-size:15px;">HSG Investment</span>
+    </div>
+    <p>HSG Investment no es un asesor de inversiones registrado. Toda inversión conlleva riesgo.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Links</h4>
+    <a href="#proceso">Llamada → renta</a>
+    <a href="#operadores">Operadores</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <p>carlos.cuellar@hsgsynergy.com</p>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="lang-btn active" style="font-size:13px;padding:4px 10px;border:1.5px solid var(--border);border-radius:6px;">ES</button>
+      <button class="lang-btn" style="font-size:13px;padding:4px 10px;border:1.5px solid var(--border);border-radius:6px;">EN</button>
+    </div>
+  </div>
+</footer>
+
+<!-- STICKY WA -->
+<a href="https://wa.me/1234567890" class="sticky-wa">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.131.558 4.13 1.535 5.865L.057 23.54a.5.5 0 00.608.633l5.898-1.547A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.032-1.384l-.36-.213-3.732.979 1-3.64-.235-.374A9.818 9.818 0 012.182 12C2.182 6.573 6.573 2.182 12 2.182c5.427 0 9.818 4.391 9.818 9.818 0 5.427-4.391 9.818-9.818 9.818z"/></svg>
+  Hablar por WhatsApp
+</a>
+
+<script>
+// ─── SCROLL ANIMATIONS ────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Counter animation
+      const counter = entry.target.querySelector('[data-counter]') || (entry.target.dataset.counter !== undefined ? entry.target : null);
+      if (entry.target.dataset.counter !== undefined) animateCounter(entry.target);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('[data-a]').forEach(el => observer.observe(el));
+
+// Counter animation for numbers
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.counter);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const decimals = parseInt(el.dataset.decimals || '0');
+  const format = el.dataset.format;
+  const duration = 1400;
+  const start = performance.now();
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const val = target * easeOut(progress);
+    let display;
+    if (format === 'comma') {
+      display = new Intl.NumberFormat('en-US').format(Math.round(val));
+    } else {
+      display = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toString();
+    }
+    el.textContent = prefix + display + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ─── CALCULATOR ───────────────────────────────────────────────
+function fmt(n) {
+  return new Intl.NumberFormat('es-US').format(Math.round(n));
+}
+function updateCalc() {
+  const capital = parseInt(document.getElementById('calc-slider').value);
+  const numProps = Math.max(1, Math.round(capital / 380000));
+  const monthlyRent = Math.round(capital * 0.035 / 12);
+  const coc = 3.5;
+  const cf5 = Math.round(capital * 0.1875);
+  const eq5 = Math.round(capital * 0.1075);
+  const tot5 = cf5 + eq5;
+  const pct5 = Math.round((tot5 / capital) * 100);
+
+  document.getElementById('calc-display').textContent = 'US$ ' + fmt(capital);
+  document.getElementById('calc-title').textContent = `Con US$ ${fmt(capital)} puedes construir un portafolio de:`;
+  document.getElementById('r-props').textContent = numProps + (numProps === 1 ? ' propiedad' : ' propiedades');
+  document.getElementById('r-rent').textContent = '~US$ ' + fmt(monthlyRent) + '/mes';
+  document.getElementById('r-coc').textContent = coc.toFixed(1) + '%';
+  document.getElementById('r-cf5').textContent = 'US$ ' + fmt(cf5);
+  document.getElementById('r-eq5').textContent = 'US$ ' + fmt(eq5);
+  document.getElementById('r-tot5').textContent = 'US$ ' + fmt(tot5) + ' (' + pct5 + '%)';
+}
+
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Range slider track fill
+document.getElementById('calc-slider').addEventListener('input', function() {
+  const min = this.min, max = this.max, val = this.value;
+  const pct = ((val - min) / (max - min)) * 100;
+  this.style.background = `linear-gradient(to right, var(--blue) ${pct}%, #E2E7F0 ${pct}%)`;
+  updateCalc();
+});
+// Init
+(function() {
+  const s = document.getElementById('calc-slider');
+  const pct = ((s.value - s.min) / (s.max - s.min)) * 100;
+  s.style.background = `linear-gradient(to right, var(--blue) ${pct}%, #E2E7F0 ${pct}%)`;
+  updateCalc();
+})();
+
+// ─── HERO SHOWCASE (slides) ───────────────────────────────────
+(function initHeroShowcase() {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.querySelector('[data-hsp-slides]');
+  if (!root) return;
+  const slides = Array.from(root.querySelectorAll('[data-hsp-slide]'));
+  const dots = Array.from(document.querySelectorAll('[data-hsp-dot]'));
+  if (slides.length === 0) return;
+
+  let index = 0;
+  const apply = () => {
+    slides.forEach((el, i) => el.classList.toggle('active', i === index));
+    dots.forEach((el, i) => el.classList.toggle('active', i === index));
+  };
+
+  dots.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      index = i;
+      apply();
+    });
+  });
+
+  apply();
+  if (prefersReduced) return;
+  window.setInterval(() => {
+    index = (index + 1) % slides.length;
+    apply();
+  }, 4800);
+})();
+
+// ─── CALCULATOR PHOTO ROTATION ────────────────────────────────
+(function initCalcPhotoRotation() {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const shots = Array.from(document.querySelectorAll('.calc-photo .calc-shot'));
+  if (shots.length <= 1) return;
+
+  let i = 0;
+  const apply = () => {
+    shots.forEach((el, idx) => el.classList.toggle('active', idx === i));
+  };
+  apply();
+  if (prefersReduced) return;
+  window.setInterval(() => {
+    i = (i + 1) % shots.length;
+    apply();
+  }, 5200);
+})();
+</script>
+</body>
+</html>

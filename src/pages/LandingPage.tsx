@@ -213,14 +213,16 @@ export function LandingPage({
               className="flex min-w-0 shrink-0 items-center gap-2"
               onClick={() => setNavOpen(false)}
             >
-              <img
-                src="/hsg-investment-color.png"
-                alt="HSG Investment"
-                className="h-16 w-auto shrink-0 object-contain"
-                loading="eager"
-              />
-              <span className="truncate text-[15px] font-extrabold tracking-tight text-slate-900">
-                HSG Investment
+              <span className="grid h-10 w-20 p-1 shrink-0 place-items-center rounded-xl bg-brand-700 shadow-sm shadow-brand-900/10">
+                <img
+                  src="/rsz_1hsg-investmen-blanco.png"
+                  alt="HSG Investment"
+                  className="h-8 w-auto object-contain"
+                  loading="eager"
+                />
+              </span>
+              <span className="truncate text-2xl font-extrabold tracking-tight text-slate-900">
+                Investments
               </span>
             </a>
 
@@ -336,12 +338,14 @@ export function LandingPage({
                   className="flex min-w-0 items-center gap-2"
                   onClick={() => setNavOpen(false)}
                 >
-                  <img
-                    src="/hsg-investment-color.png"
-                    alt="HSG Investment"
-                    className="h-10 w-auto shrink-0 object-contain"
-                    loading="eager"
-                  />
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand-700 shadow-sm shadow-brand-900/10">
+                    <img
+                      src="/rsz_1hsg-investmen-blanco.png"
+                      alt="HSG Investment"
+                      className="h-7 w-auto object-contain"
+                      loading="eager"
+                    />
+                  </span>
                   <span className="truncate text-sm font-extrabold tracking-tight text-slate-900">
                     HSG Investment
                   </span>
@@ -829,12 +833,14 @@ export function LandingPage({
           <div className="grid gap-10 md:grid-cols-3 md:items-start">
             <div>
               <div className="flex items-center gap-2">
-                <img
-                  src="/hsg-investment-color.png"
-                  alt="HSG Investment"
-                  className="h-10 w-auto object-contain"
-                  loading="lazy"
-                />
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-brand-700 shadow-sm shadow-brand-900/10">
+                  <img
+                    src="/rsz_1hsg-investmen-blanco.png"
+                    alt="HSG Investment"
+                    className="h-7 w-auto object-contain"
+                    loading="lazy"
+                  />
+                </span>
               </div>
               <p className="mt-3 text-sm text-slate-600">{t(lang, 'footer_legal')}</p>
             </div>

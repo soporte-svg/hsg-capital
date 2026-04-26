@@ -213,10 +213,13 @@ export function LandingPage({
               className="flex min-w-0 shrink-0 items-center gap-2"
               onClick={() => setNavOpen(false)}
             >
-              <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-lg bg-brand-700 text-white shadow-sm shadow-brand-900/10">
-                <span className="text-sm font-bold tracking-tight">HSG</span>
-              </div>
-              <span className="truncate text-[15px] font-semibold tracking-tight text-slate-900">
+              <img
+                src="/hsg-investment-color.png"
+                alt="HSG Investment"
+                className="h-16 w-auto shrink-0 object-contain"
+                loading="eager"
+              />
+              <span className="truncate text-[15px] font-extrabold tracking-tight text-slate-900">
                 HSG Investment
               </span>
             </a>
@@ -333,10 +336,13 @@ export function LandingPage({
                   className="flex min-w-0 items-center gap-2"
                   onClick={() => setNavOpen(false)}
                 >
-                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-900/10">
-                    <span className="text-sm font-bold tracking-tight">HSG</span>
-                  </div>
-                  <span className="truncate text-sm font-semibold tracking-tight text-slate-900">
+                  <img
+                    src="/hsg-investment-color.png"
+                    alt="HSG Investment"
+                    className="h-10 w-auto shrink-0 object-contain"
+                    loading="eager"
+                  />
+                  <span className="truncate text-sm font-extrabold tracking-tight text-slate-900">
                     HSG Investment
                   </span>
                 </a>
@@ -823,10 +829,12 @@ export function LandingPage({
           <div className="grid gap-10 md:grid-cols-3 md:items-start">
             <div>
               <div className="flex items-center gap-2">
-                <div className="grid h-9 w-9 place-items-center rounded-xl bg-slate-900 text-white">
-                  <span className="text-sm font-bold tracking-tight">HSG</span>
-                </div>
-                <p className="text-sm font-semibold">HSG Investment</p>
+                <img
+                  src="/hsg-investment-color.png"
+                  alt="HSG Investment"
+                  className="h-10 w-auto object-contain"
+                  loading="lazy"
+                />
               </div>
               <p className="mt-3 text-sm text-slate-600">{t(lang, 'footer_legal')}</p>
             </div>

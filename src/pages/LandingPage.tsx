@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Lang } from '../i18n'
 import { t } from '../i18n'
@@ -6,6 +7,7 @@ import { CONTACT_EMAIL, getWhatsAppHref } from '../config'
 import { trackEvent } from '../lib/tracking'
 import { CheckIcon, WhatsAppIcon } from '../components/icons'
 import { HeroShowcase } from '../components/HeroShowcase'
+import { HeroShowcasePulse } from '../components/HeroShowcasePulse'
 import { CalculatorSection } from '../components/CalculatorSection'
 import { JourneyTimelineSection } from '../components/JourneyTimelineSection'
 import { OperatorsStatementSection } from '../components/OperatorsStatementSection'
@@ -19,7 +21,13 @@ import { Button, Container, Modal, SectionTitle } from '../components/ui'
  * Activar de nuevo: pon `SHOW_PORTFOLIO_SIMULATOR_WHY` en `true` dentro del
  * componente y revisa nav / hero / footer (enlaces a #properties).
  * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Página dedicada HSG Capital (clásica): /capital.
+ * Variante `spectrum`: misma landing con estética violeta→azul en /es/capital y /en/capital.
  */
+
+/** `true` = hero visual “Pulse” (dashboard oscuro + carrusel). `false` = mosaico clásico. */
+const USE_HERO_SHOWCASE_PULSE = true
 
 type Property = {
   address: string
@@ -84,14 +92,17 @@ function AnchorLink({
   href,
   children,
   className = '',
+  onClick,
 }: {
   href: string
   children: React.ReactNode
   className?: string
+  onClick?: () => void
 }) {
   return (
     <a
       href={href}
+      onClick={onClick}
       className={`text-sm font-medium text-slate-700 hover:text-slate-900 ${className}`}
     >
       {children}
@@ -102,30 +113,67 @@ function AnchorLink({
 function NavRouteLink({
   onClick,
   children,
+  className = '',
 }: {
   onClick: () => void
   children: React.ReactNode
+  className?: string
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="text-sm font-medium text-slate-700 hover:text-slate-900"
+      className={`text-sm font-medium text-slate-700 hover:text-slate-900 ${className}`}
     >
       {children}
     </button>
   )
 }
 
-export function LandingPage({ lang }: { lang: Lang }) {
+export type LandingPageVariant = 'default' | 'spectrum'
+
+export function LandingPage({
+  lang,
+  variant = 'default',
+}: {
+  lang: Lang
+  variant?: LandingPageVariant
+}) {
   const navigate = useNavigate()
   const [simOpen, setSimOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
   /** Ver bloque de nota al inicio de este archivo. */
   const SHOW_PORTFOLIO_SIMULATOR_WHY = false
+  const isSpectrum = variant === 'spectrum'
+  const langPath = `/${lang}`
+  const capitalPath = '/capital'
 
   useEffect(() => {
     document.documentElement.lang = lang
   }, [lang])
+
+  useEffect(() => {
+    if (!navOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setNavOpen(false)
+    }
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [navOpen])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const onChange = () => {
+      if (mq.matches) setNavOpen(false)
+    }
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   const whatsappMessage =
     lang === 'en'
@@ -135,7 +183,30 @@ export function LandingPage({ lang }: { lang: Lang }) {
   const whatsappHref = getWhatsAppHref(whatsappMessage)
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div
+      className={`min-h-screen text-slate-900 ${
+        isSpectrum
+          ? 'spectrum-landing relative bg-[linear-gradient(180deg,#f5f3ff_0%,#ffffff_22%,#f8fafc_55%,#eff6ff_88%,#ffffff_100%)]'
+          : 'bg-slate-50'
+      }`}
+    >
+      {isSpectrum ? (
+        <>
+          <div
+            className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(720px_420px_at_14%_6%,rgba(139,92,246,0.14),transparent_58%),radial-gradient(640px_400px_at_90%_16%,rgba(37,99,235,0.11),transparent_55%)]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -left-24 top-24 z-0 h-72 w-72 rounded-full bg-violet-300/25 blur-3xl"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -right-20 bottom-32 z-0 h-80 w-80 rounded-full bg-brand-400/20 blur-3xl"
+            aria-hidden
+          />
+        </>
+      ) : null}
+      <div className={isSpectrum ? 'relative z-10' : undefined}>
       {/* Floating WhatsApp */}
       <a
         href={whatsappHref}
@@ -149,38 +220,59 @@ export function LandingPage({ lang }: { lang: Lang }) {
       </a>
 
       {/* Navbar */}
-      <div className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/85 backdrop-blur">
+      <div
+        className={`relative sticky top-0 z-[70] ${
+          isSpectrum
+            ? 'bg-white/92 shadow-[0_8px_32px_-14px_rgba(91,33,182,0.14)] backdrop-blur-xl'
+            : 'bg-white/95 shadow-[0_1px_0_rgba(15,23,42,0.05),0_10px_36px_-22px_rgba(15,23,42,0.1)] backdrop-blur'
+        }`}
+      >
         <Container>
-          <div className="flex h-16 items-center justify-between gap-3">
-            <a href="#" className="flex items-center gap-2">
-              <div className="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-900/10">
+          <div className="flex h-14 min-h-[3.5rem] items-center justify-between gap-2 md:h-16 md:gap-3">
+            <a
+              href={isSpectrum ? langPath : '#'}
+              className="flex min-w-0 shrink-0 items-center gap-2"
+              onClick={() => setNavOpen(false)}
+            >
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-900/10">
                 <span className="text-sm font-bold tracking-tight">HSG</span>
               </div>
-              <span className="text-sm font-semibold tracking-tight text-slate-900">
+              <span className="truncate text-sm font-semibold tracking-tight text-slate-900">
                 HSG Investment
               </span>
             </a>
 
-            <div className="hidden items-center gap-6 md:flex">
-              {SHOW_PORTFOLIO_SIMULATOR_WHY ? (
-                <AnchorLink href="#properties">{t(lang, 'nav_properties')}</AnchorLink>
-              ) : null}
-              <AnchorLink href="#journey">{t(lang, 'nav_journey')}</AnchorLink>
-              <AnchorLink href="#operators">{t(lang, 'nav_operators')}</AnchorLink>
-              <AnchorLink href="#faq">{t(lang, 'nav_faq')}</AnchorLink>
-              <NavRouteLink onClick={() => navigate('/capital')}>
-                HSG Capital
-              </NavRouteLink>
-            </div>
+            <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2 md:gap-3">
+              <nav className="hidden items-center gap-6 md:flex" aria-label="Main">
+                {SHOW_PORTFOLIO_SIMULATOR_WHY ? (
+                  <AnchorLink href="#properties">{t(lang, 'nav_properties')}</AnchorLink>
+                ) : null}
+                <AnchorLink href="#journey">{t(lang, 'nav_journey')}</AnchorLink>
+                <AnchorLink href="#operators">{t(lang, 'nav_operators')}</AnchorLink>
+                <AnchorLink href="#faq">{t(lang, 'nav_faq')}</AnchorLink>
+                <NavRouteLink
+                  onClick={() => navigate(isSpectrum ? langPath : capitalPath)}
+                >
+                  HSG Capital
+                </NavRouteLink>
+              </nav>
 
-            <div className="flex items-center gap-2">
-              <div className="hidden items-center rounded-xl bg-slate-50 p-1 ring-1 ring-slate-100 sm:flex">
+              <div
+                className={`flex shrink-0 items-center rounded-lg p-0.5 ring-1 sm:rounded-xl sm:p-1 ${
+                  isSpectrum
+                    ? 'bg-violet-50/90 ring-violet-200/60'
+                    : 'bg-slate-50 ring-slate-200/80'
+                }`}
+              >
                 <button
                   type="button"
-                  onClick={() => navigate('/es')}
-                  className={`rounded-lg px-3 py-1 text-xs font-semibold ${
+                  onClick={() => {
+                    setNavOpen(false)
+                    navigate(isSpectrum ? '/es/capital' : '/es')
+                  }}
+                  className={`rounded-md px-2 py-1.5 text-xs font-semibold sm:rounded-lg sm:px-3 sm:py-1 ${
                     lang === 'es'
-                      ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200'
+                      ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/80'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -188,10 +280,13 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => navigate('/en')}
-                  className={`rounded-lg px-3 py-1 text-xs font-semibold ${
+                  onClick={() => {
+                    setNavOpen(false)
+                    navigate(isSpectrum ? '/en/capital' : '/en')
+                  }}
+                  className={`rounded-md px-2 py-1.5 text-xs font-semibold sm:rounded-lg sm:px-3 sm:py-1 ${
                     lang === 'en'
-                      ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200'
+                      ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/80'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -209,20 +304,160 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 <WhatsAppIcon className="h-4 w-4 text-white" />
                 {t(lang, 'hero_primary')}
               </Button>
+
+              <button
+                type="button"
+                className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 md:hidden ${
+                  isSpectrum
+                    ? 'bg-white/80 text-violet-900 ring-1 ring-violet-200/70'
+                    : 'bg-white text-slate-800 ring-1 ring-slate-200/80'
+                }`}
+                aria-expanded={navOpen}
+                aria-controls="landing-mobile-nav"
+                aria-label={lang === 'en' ? 'Open menu' : 'Abrir menú'}
+                onClick={() => setNavOpen((o) => !o)}
+              >
+                {navOpen ? (
+                  <X className="h-5 w-5" strokeWidth={2} aria-hidden />
+                ) : (
+                  <Menu className="h-5 w-5" strokeWidth={2} aria-hidden />
+                )}
+              </button>
             </div>
           </div>
         </Container>
       </div>
 
+      {navOpen ? (
+        <div className="fixed inset-0 z-[90] md:hidden" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-900/35"
+            aria-label={lang === 'en' ? 'Close menu' : 'Cerrar menú'}
+            onClick={() => setNavOpen(false)}
+          />
+          <div
+            id="landing-mobile-nav"
+            className={`absolute inset-0 overflow-y-auto overscroll-contain ${
+              isSpectrum ? 'bg-[#fbf7ff]' : 'bg-white'
+            } pb-[max(1.25rem,env(safe-area-inset-bottom))]`}
+            aria-label={lang === 'en' ? 'Site menu' : 'Menú del sitio'}
+          >
+            <div className="px-4 pt-[max(0.75rem,env(safe-area-inset-top))]">
+              <div className="flex h-14 items-center justify-between">
+                <a
+                  href={isSpectrum ? langPath : '#'}
+                  className="flex min-w-0 items-center gap-2"
+                  onClick={() => setNavOpen(false)}
+                >
+                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-sm shadow-brand-900/10">
+                    <span className="text-sm font-bold tracking-tight">HSG</span>
+                  </div>
+                  <span className="truncate text-sm font-semibold tracking-tight text-slate-900">
+                    HSG Investment
+                  </span>
+                </a>
+                <button
+                  type="button"
+                  className={`inline-flex h-10 w-10 items-center justify-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 ${
+                    isSpectrum
+                      ? 'bg-white text-violet-900 ring-1 ring-violet-200/70'
+                      : 'bg-white text-slate-800 ring-1 ring-slate-200/80'
+                  }`}
+                  aria-label={lang === 'en' ? 'Close menu' : 'Cerrar menú'}
+                  onClick={() => setNavOpen(false)}
+                >
+                  <X className="h-5 w-5" strokeWidth={2} aria-hidden />
+                </button>
+              </div>
+            </div>
+
+            <div className="px-4 pb-6 pt-2">
+              <nav className="mx-auto flex max-w-6xl flex-col gap-1" aria-label="Mobile">
+                {SHOW_PORTFOLIO_SIMULATOR_WHY ? (
+                  <AnchorLink
+                    href="#properties"
+                    className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                    onClick={() => setNavOpen(false)}
+                  >
+                    {t(lang, 'nav_properties')}
+                  </AnchorLink>
+                ) : null}
+                <AnchorLink
+                  href="#journey"
+                  className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                  onClick={() => setNavOpen(false)}
+                >
+                  {t(lang, 'nav_journey')}
+                </AnchorLink>
+                <AnchorLink
+                  href="#operators"
+                  className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                  onClick={() => setNavOpen(false)}
+                >
+                  {t(lang, 'nav_operators')}
+                </AnchorLink>
+                <AnchorLink
+                  href="#faq"
+                  className="rounded-xl px-3 py-3 text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                  onClick={() => setNavOpen(false)}
+                >
+                  {t(lang, 'nav_faq')}
+                </AnchorLink>
+                <NavRouteLink
+                  className="block w-full rounded-xl px-3 py-3 text-left text-base font-semibold text-slate-900 active:bg-slate-100/80"
+                  onClick={() => {
+                    setNavOpen(false)
+                    navigate(isSpectrum ? langPath : capitalPath)
+                  }}
+                >
+                  HSG Capital
+                </NavRouteLink>
+              </nav>
+
+              <div className="mx-auto mt-6 max-w-6xl">
+                <Button
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  variant="whatsapp"
+                  className="w-full justify-center py-3 text-base"
+                  onClick={() => setNavOpen(false)}
+                >
+                  <WhatsAppIcon className="h-5 w-5 text-white" />
+                  {t(lang, 'hero_primary')}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {/* Hero */}
-      <div className="relative overflow-hidden bg-white">
+      <div
+        className={`relative overflow-hidden ${
+          isSpectrum ? 'border-b border-violet-200/25' : 'bg-white'
+        }`}
+      >
         {/* Clean gradient background */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_20%_10%,rgba(37,99,235,0.10),transparent_60%),radial-gradient(900px_500px_at_90%_30%,rgba(56,189,248,0.10),transparent_55%),linear-gradient(to_bottom,#ffffff,#f8fafc,#ffffff)]" />
+        <div
+          className={
+            isSpectrum
+              ? 'pointer-events-none absolute inset-0 bg-[radial-gradient(1000px_520px_at_18%_8%,rgba(124,58,237,0.12),transparent_58%),radial-gradient(900px_480px_at_88%_28%,rgba(37,99,235,0.11),transparent_55%),linear-gradient(to_bottom,rgba(255,255,255,0.92),#ffffff,#f8fafc)]'
+              : 'pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_20%_10%,rgba(37,99,235,0.10),transparent_60%),radial-gradient(900px_500px_at_90%_30%,rgba(56,189,248,0.10),transparent_55%),linear-gradient(to_bottom,#ffffff,#f8fafc,#ffffff)]'
+          }
+        />
         <Container>
           <div className="relative py-14 md:py-20">
             <div className="grid items-center gap-10 md:grid-cols-2">
               <div>
-                <p className="inline-flex items-center rounded-full bg-brand-50 px-4 py-1 text-xs font-semibold text-brand-700 ring-1 ring-brand-100">
+                <p
+                  className={`inline-flex items-center rounded-full px-4 py-1 text-xs font-semibold ring-1 ${
+                    isSpectrum
+                      ? 'border border-violet-200/60 bg-white/80 text-violet-800 ring-violet-100/80'
+                      : 'bg-brand-50 text-brand-700 ring-brand-100'
+                  }`}
+                >
                   HSG Investment • Real estate • USD income
                 </p>
                 <h1 className="mt-5 text-balance text-4xl font-extrabold tracking-tight text-slate-900 md:text-6xl">
@@ -257,14 +492,24 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 </div>
               </div>
 
-              <HeroShowcase lang={lang} />
+              {USE_HERO_SHOWCASE_PULSE ? (
+                <HeroShowcasePulse lang={lang} />
+              ) : (
+                <HeroShowcase lang={lang} />
+              )}
             </div>
           </div>
         </Container>
       </div>
 
       {/* Metrics */}
-      <div className="border-b border-slate-200/60 bg-white">
+      <div
+        className={`border-b py-0 ${
+          isSpectrum
+            ? 'border-violet-200/25 bg-transparent'
+            : 'border-slate-200/60 bg-white'
+        }`}
+      >
         <Container>
           <div className="grid gap-4 py-10 md:grid-cols-4">
             {[
@@ -275,7 +520,11 @@ export function LandingPage({ lang }: { lang: Lang }) {
             ].map(([k, v]) => (
               <div
                 key={k}
-                className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200/70"
+                className={`rounded-2xl p-5 shadow-sm ${
+                  isSpectrum
+                    ? 'border border-white/70 bg-white/75 ring-1 ring-violet-100/70 backdrop-blur-md'
+                    : 'bg-white ring-1 ring-slate-200/70'
+                }`}
               >
                 <p className="text-2xl font-extrabold tracking-tight text-slate-900">
                   {t(lang, v)}
@@ -288,8 +537,19 @@ export function LandingPage({ lang }: { lang: Lang }) {
       </div>
 
       {/* Problem */}
-      <div id="problem" className="relative border-b border-slate-200/60">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-white" />
+      <div
+        id="problem"
+        className={`relative border-b ${
+          isSpectrum ? 'border-violet-200/25' : 'border-slate-200/60'
+        }`}
+      >
+        <div
+          className={
+            isSpectrum
+              ? 'pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-violet-50/30 to-brand-50/25'
+              : 'pointer-events-none absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-white'
+          }
+        />
         <div
           className="pointer-events-none absolute inset-0 opacity-70"
           style={{
@@ -327,7 +587,11 @@ export function LandingPage({ lang }: { lang: Lang }) {
               ].map(([titleKey, bodyKey]) => (
                 <div
                   key={titleKey}
-                  className="rounded-2xl bg-white/80 p-6 shadow-sm ring-1 ring-slate-200/70 backdrop-blur"
+                  className={`rounded-2xl p-6 shadow-sm backdrop-blur ${
+                    isSpectrum
+                      ? 'border border-white/70 bg-white/70 ring-1 ring-violet-100/60'
+                      : 'bg-white/80 ring-1 ring-slate-200/70'
+                  }`}
                 >
                   <p className="text-sm font-extrabold text-slate-900">
                     {t(lang, titleKey)}
@@ -340,7 +604,13 @@ export function LandingPage({ lang }: { lang: Lang }) {
             </div>
 
             <div className="mx-auto mt-10 max-w-3xl">
-              <div className="rounded-full border border-white/60 bg-white/35 px-6 py-4 text-center shadow-[0_18px_60px_-34px_rgba(2,6,23,0.35)] backdrop-blur-md ring-1 ring-slate-200/60 md:px-10 md:py-5">
+              <div
+                className={`rounded-full border px-6 py-4 text-center shadow-[0_18px_60px_-34px_rgba(2,6,23,0.35)] backdrop-blur-md md:px-10 md:py-5 ${
+                  isSpectrum
+                    ? 'border-violet-200/50 bg-white/60 ring-1 ring-brand-100/50'
+                    : 'border-white/60 bg-white/35 ring-1 ring-slate-200/60'
+                }`}
+              >
                 <p className="text-sm font-semibold leading-7 text-slate-900 md:text-base">
                   {t(lang, 'problem_closing')}
                 </p>
@@ -350,7 +620,15 @@ export function LandingPage({ lang }: { lang: Lang }) {
         </Container>
       </div>
 
-      <CalculatorSection lang={lang} />
+      <div
+        className={
+          isSpectrum
+            ? 'border-y border-violet-200/20 bg-white/55 backdrop-blur-[2px]'
+            : ''
+        }
+      >
+        <CalculatorSection lang={lang} />
+      </div>
 
       <JourneyTimelineSection lang={lang} />
 
@@ -552,7 +830,14 @@ export function LandingPage({ lang }: { lang: Lang }) {
       ) : null}
 
       {/* FAQ */}
-      <div id="faq" className="border-t border-slate-200/60 bg-white py-16 md:py-20">
+      <div
+        id="faq"
+        className={`border-t py-16 md:py-20 ${
+          isSpectrum
+            ? 'border-violet-200/25 bg-white/45 backdrop-blur-sm'
+            : 'border-slate-200/60 bg-white'
+        }`}
+      >
         <Container>
           <SectionTitle title={t(lang, 'faq_title')} />
           <div className="mx-auto mt-10 max-w-3xl space-y-3">
@@ -568,7 +853,14 @@ export function LandingPage({ lang }: { lang: Lang }) {
                 ['faq_q8', 'faq_a8'],
               ] as const
             ).map(([qk, ak]) => (
-              <FaqItem key={qk} q={t(lang, qk)} a={t(lang, ak)} trackId={qk} lang={lang} />
+              <FaqItem
+                key={qk}
+                q={t(lang, qk)}
+                a={t(lang, ak)}
+                trackId={qk}
+                lang={lang}
+                spectrum={isSpectrum}
+              />
             ))}
           </div>
         </Container>
@@ -617,7 +909,13 @@ export function LandingPage({ lang }: { lang: Lang }) {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-slate-100 bg-white py-12">
+      <footer
+        className={`border-t py-12 ${
+          isSpectrum
+            ? 'border-violet-200/30 bg-white/80 backdrop-blur-md'
+            : 'border-slate-100 bg-white'
+        }`}
+      >
         <Container>
           <div className="grid gap-10 md:grid-cols-3 md:items-start">
             <div>
@@ -660,7 +958,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
                   <span className="text-slate-500">Language:</span>
                   <button
                     type="button"
-                    onClick={() => navigate('/es')}
+                    onClick={() => navigate(isSpectrum ? '/es/capital' : '/es')}
                     className={`rounded-lg px-2 py-1 text-xs font-semibold ring-1 ${
                       lang === 'es'
                         ? 'bg-slate-900 text-white ring-slate-900'
@@ -671,7 +969,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => navigate('/en')}
+                    onClick={() => navigate(isSpectrum ? '/en/capital' : '/en')}
                     className={`rounded-lg px-2 py-1 text-xs font-semibold ring-1 ${
                       lang === 'en'
                         ? 'bg-slate-900 text-white ring-slate-900'
@@ -711,6 +1009,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
           </Button>
         </div>
       </Modal>
+      </div>
     </div>
   )
 }
@@ -720,15 +1019,23 @@ function FaqItem({
   a,
   trackId,
   lang,
+  spectrum = false,
 }: {
   q: string
   a: string
   trackId: string
   lang: Lang
+  spectrum?: boolean
 }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-200/70">
+    <div
+      className={
+        spectrum
+          ? 'rounded-2xl border border-white/70 bg-white/75 ring-1 ring-violet-100/60 backdrop-blur-md'
+          : 'rounded-2xl bg-slate-50 ring-1 ring-slate-200/70'
+      }
+    >
       <button
         type="button"
         className="flex w-full items-center justify-between gap-4 p-5 text-left"

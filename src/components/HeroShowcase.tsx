@@ -67,40 +67,36 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
     'rounded-[28px] bg-white shadow-[0_18px_50px_-24px_rgba(2,6,23,0.35)] ring-1 ring-slate-200/70'
 
   return (
-    <div className="relative mx-auto w-full max-w-xl">
-      {/* Outer wrapper is overflow-visible so overlays can "stick out" */}
-      <div className="relative aspect-[4/3] w-full overflow-visible">
-        {/* Inner frame keeps the main visuals clipped */}
-        <div className="absolute inset-0 overflow-hidden rounded-[32px] bg-slate-100 ring-1 ring-slate-200/70">
-          {/* soft backdrop */}
+    <div className="hero-showcase relative mx-auto w-full max-w-xl">
+      <div className="relative w-full overflow-visible md:aspect-[4/3] md:min-h-0">
+        <div className="relative overflow-hidden rounded-[32px] bg-slate-100 ring-1 ring-slate-200/70 max-md:overflow-x-hidden md:absolute md:inset-0 md:min-h-0 md:overflow-hidden">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-50 via-white to-slate-50" />
           <div className="pointer-events-none absolute -left-16 -top-20 h-56 w-56 rounded-full bg-brand-500/15 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -right-16 h-64 w-64 rounded-full bg-sky-400/15 blur-3xl" />
 
-          {/* Scene A: UI cards (like your blue/white metric board) */}
           <div
-            className={`absolute inset-0 p-5 transition duration-700 ${
-              scene === 0 ? 'opacity-100' : 'opacity-0'
+            className={`relative z-10 flex flex-col gap-2.5 p-3.5 transition duration-700 max-md:min-h-0 md:absolute md:inset-0 md:z-auto md:gap-4 md:p-5 ${
+              scene === 0 ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
             aria-hidden={scene !== 0}
           >
-            <div className="grid h-full grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-2.5 md:flex-1 md:grid-cols-2 md:grid-rows-[auto_auto] md:items-stretch md:gap-4 md:self-stretch">
               <div
-                className={`relative col-span-1 row-span-2 overflow-hidden rounded-[28px] bg-brand-600 p-6 text-white shadow-[0_20px_60px_-30px_rgba(29,78,216,0.8)] ${
+                className={`relative overflow-hidden rounded-[28px] bg-brand-600 p-4 text-white shadow-[0_20px_60px_-30px_rgba(29,78,216,0.8)] md:row-span-2 md:flex md:h-full md:min-h-0 md:flex-col md:p-6 ${
                   reducedMotion ? '' : 'hsg-float'
                 }`}
               >
-                <p className="text-xs font-semibold uppercase tracking-wider text-white/75">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-white/75 md:text-xs">
                   {labels.annualYield}
                 </p>
-                <p className="mt-5 text-6xl font-semibold leading-none tracking-tight">
+                <p className="mt-2.5 text-3xl font-semibold leading-none tracking-tight md:mt-5 md:text-5xl lg:text-6xl">
                   {labels.yieldPlus}
                 </p>
-                <p className="mt-3 text-base text-white/80">
+                <p className="mt-2 text-sm text-white/80 md:mt-3 md:text-base">
                   {labels.annual} • Chicago, IL
                 </p>
-                <div className="mt-6 rounded-2xl bg-white/10 p-4 ring-1 ring-white/15">
-                  <div className="h-24 w-full">
+                <div className="mt-3 rounded-2xl bg-white/10 p-2.5 ring-1 ring-white/15 md:mt-6 md:flex md:min-h-0 md:flex-1 md:flex-col md:p-4">
+                  <div className="h-12 w-full md:min-h-[5.5rem] md:flex-1">
                     <svg
                       viewBox="0 0 260 90"
                       className="h-full w-full"
@@ -120,33 +116,33 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
                       />
                     </svg>
                   </div>
-                  <div className="mt-4 grid grid-cols-3 gap-3 text-xs text-white/85">
+                  <div className="mt-2.5 grid grid-cols-3 gap-2 text-[11px] text-white/85 md:mt-4 md:gap-3 md:text-xs">
                     <div>
                       <p className="text-white/65">2022</p>
-                      <p className="mt-1 text-sm font-semibold">5.8%</p>
+                      <p className="mt-0.5 text-xs font-semibold md:mt-1 md:text-sm">5.8%</p>
                     </div>
                     <div>
                       <p className="text-white/65">2023</p>
-                      <p className="mt-1 text-sm font-semibold">6.4%</p>
+                      <p className="mt-0.5 text-xs font-semibold md:mt-1 md:text-sm">6.4%</p>
                     </div>
                     <div>
                       <p className="text-white/65">2024</p>
-                      <p className="mt-1 text-sm font-semibold">7.2%</p>
+                      <p className="mt-0.5 text-xs font-semibold md:mt-1 md:text-sm">7.2%</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div
-                className={`${cardBase} relative overflow-hidden p-5 ${
+                className={`${cardBase} relative min-h-0 overflow-visible p-3.5 md:min-h-0 md:self-start md:p-5 ${
                   reducedMotion ? '' : 'hsg-float-delayed'
                 }`}
               >
-                <div className="flex items-start gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
+                <div className="flex items-start gap-2.5 md:gap-3">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100 md:h-10 md:w-10">
                     <svg
                       viewBox="0 0 24 24"
-                      className="h-5 w-5"
+                      className="h-4 w-4 md:h-5 md:w-5"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                       aria-hidden="true"
@@ -167,16 +163,16 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 md:text-xs">
                       {labels.rentReceived}
                     </p>
-                    <p className="mt-2 text-3xl font-semibold tracking-tight text-emerald-600">
+                    <p className="mt-1.5 text-xl font-semibold tracking-tight text-emerald-600 md:mt-2 md:text-3xl">
                       {labels.rentValue}{' '}
-                      <span className="text-base font-semibold text-slate-500">
+                      <span className="text-xs font-semibold text-slate-500 md:text-base">
                         USD
                       </span>
                     </p>
-                    <p className="mt-2 text-sm text-slate-600">
+                    <p className="mt-1.5 text-xs leading-snug text-slate-600 md:mt-2 md:text-sm">
                       {labels.thisMonth} • Van Vlissingen
                     </p>
                   </div>
@@ -184,18 +180,20 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
               </div>
 
               <div
-                className={`${cardBase} p-5 ${reducedMotion ? '' : 'hsg-float'}`}
+                className={`${cardBase} min-h-0 p-3.5 md:min-h-0 md:self-start md:p-5 ${
+                  reducedMotion ? '' : 'hsg-float'
+                }`}
               >
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-xs font-semibold text-slate-900 md:text-sm">
                   10214 Van Vlissingen Rd
                 </p>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <p className="text-4xl font-semibold tracking-tight text-amber-600">
+                <div className="mt-2 flex items-baseline gap-2 md:mt-3">
+                  <p className="text-2xl font-semibold tracking-tight text-amber-600 md:text-4xl">
                     63.4%
                   </p>
-                  <p className="text-sm text-slate-500">{labels.funded}</p>
+                  <p className="text-xs text-slate-500 md:text-sm">{labels.funded}</p>
                 </div>
-                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 md:mt-3 md:h-2">
                   <div
                     className={`h-full rounded-full bg-brand-600 ${
                       reducedMotion ? '' : 'hsg-progress'
@@ -203,7 +201,7 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
                     style={{ width: '63.4%' }}
                   />
                 </div>
-                <div className="mt-4 flex items-center justify-between text-sm text-slate-600">
+                <div className="mt-3 flex items-center justify-between text-xs text-slate-600 md:mt-4 md:text-sm">
                   <span className="font-semibold text-brand-700">
                     {formatUsd(162_240, lang)}
                   </span>
@@ -212,20 +210,20 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
               </div>
             </div>
             <div
-              className={`mt-4 rounded-[28px] bg-brand-600 px-6 py-5 text-white shadow-[0_20px_60px_-30px_rgba(29,78,216,0.8)] ring-1 ring-white/10 ${
+              className={`shrink-0 rounded-[28px] bg-brand-600 px-3.5 py-3 text-white shadow-[0_20px_60px_-30px_rgba(29,78,216,0.8)] ring-1 ring-white/10 md:px-6 md:py-5 ${
                 reducedMotion ? '' : 'hsg-float'
               }`}
             >
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-3 md:gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-white/75">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-white/75 md:text-xs">
                     {labels.minInvestment}
                   </p>
-                  <p className="mt-2 text-3xl font-semibold tracking-tight">
+                  <p className="mt-1.5 text-xl font-semibold tracking-tight md:mt-2 md:text-3xl">
                     {formatUsd(50_000, lang)}
                   </p>
                 </div>
-                <div className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold ring-1 ring-white/15">
+                <div className="shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold ring-1 ring-white/15 md:px-4 md:py-2 md:text-sm">
                   {labels.marketActive} →
                 </div>
               </div>
@@ -233,14 +231,12 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
           </div>
         </div>
 
-        {/* Scene B overlays live OUTSIDE the clipped frame */}
         <div
-          className={`absolute inset-0 transition duration-700 ${
-            scene === 1 ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 transition duration-700 md:overflow-visible ${
+            scene === 1 ? 'opacity-100' : 'pointer-events-none opacity-0'
           }`}
           aria-hidden={scene !== 1}
         >
-          {/* Image stays clipped inside the frame */}
           <div className="pointer-events-none absolute inset-0 rounded-[32px] shadow-[0_22px_80px_-50px_rgba(2,6,23,0.45)]" />
 
           <div className="absolute inset-0 overflow-hidden rounded-[32px]">
@@ -253,17 +249,16 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
             <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-white/0 to-white/70" />
           </div>
 
-          {/* Top-left overlay sticks out */}
-          <div className="absolute -left-3 top-6 md:-left-5">
+          <div className="absolute left-3 top-4 z-20 md:-left-5 md:top-6">
             <div
-              className={`flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-xl shadow-slate-900/15 ring-1 ring-slate-200/70 ${
+              className={`flex items-center gap-3 rounded-2xl bg-white px-3 py-2.5 shadow-xl shadow-slate-900/15 ring-1 ring-slate-200/70 md:px-4 md:py-3 ${
                 reducedMotion ? '' : 'hsg-float'
               }`}
             >
-              <div className="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
+              <div className="grid h-8 w-8 place-items-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100 md:h-9 md:w-9">
                 <svg
                   viewBox="0 0 24 24"
-                  className="h-5 w-5"
+                  className="h-4 w-4 md:h-5 md:w-5"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
@@ -284,12 +279,12 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 md:text-[11px]">
                   {labels.rentReceived}
                 </p>
-                <p className="mt-1 text-sm font-semibold text-slate-900">
+                <p className="mt-0.5 text-xs font-semibold text-slate-900 md:text-sm">
                   +$329{' '}
-                  <span className="text-xs font-semibold text-slate-500">
+                  <span className="text-[11px] font-semibold text-slate-500 md:text-xs">
                     USD
                   </span>
                 </p>
@@ -297,52 +292,53 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
             </div>
           </div>
 
-          {/* Bottom overlay sticks out */}
-          <div className="absolute -bottom-7 left-4 right-4 md:left-auto md:right-[-22px] md:w-[64%]">
+          <div className="absolute bottom-4 left-3 right-3 z-10 md:-bottom-7 md:left-auto md:right-[-22px] md:w-[64%]">
             <div
-              className={`rounded-[26px] bg-white p-4 shadow-2xl shadow-slate-900/20 ring-1 ring-slate-200/70 ${
+              className={`rounded-[26px] bg-white p-3.5 shadow-2xl shadow-slate-900/20 ring-1 ring-slate-200/70 md:p-4 ${
                 reducedMotion ? '' : 'hsg-float-delayed'
               }`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-[13px] font-semibold text-slate-900">
+                  <p className="text-xs font-semibold text-slate-900 md:text-[13px]">
                     10214 South Van Vlissingen
                   </p>
-                  <p className="mt-1 text-xs text-slate-600">Chicago, IL</p>
+                  <p className="mt-1 text-[11px] text-slate-600 md:text-xs">
+                    Chicago, IL
+                  </p>
                 </div>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200 md:px-3 md:py-1 md:text-xs">
                   {lang === 'en' ? 'Available' : 'Disponible'}
                 </span>
               </div>
 
-              <div className="mt-3 grid grid-cols-2 gap-4">
+              <div className="mt-2.5 grid grid-cols-2 gap-2 md:mt-3 md:gap-4">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 md:text-[11px]">
                     {lang === 'en' ? 'Annual yield' : 'Yield anual'}
                   </p>
-                  <p className="mt-1 text-3xl font-semibold tracking-tight text-slate-900">
-                    7.18<span className="text-xl">%</span>
+                  <p className="mt-1 text-xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+                    7.18<span className="text-base md:text-xl">%</span>
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 md:text-[11px]">
                     {labels.objective}
                   </p>
-                  <p className="mt-1 text-base font-semibold text-slate-900">
+                  <p className="mt-1 text-xs font-semibold text-slate-900 md:text-base">
                     {formatUsd(162_240, lang)}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-3">
-                <div className="flex items-center justify-between text-xs text-slate-600">
+              <div className="mt-2.5 md:mt-3">
+                <div className="flex items-center justify-between text-[11px] text-slate-600 md:text-xs">
                   <span>63.4% {labels.funded}</span>
                   <span className="font-semibold text-slate-700">
                     {formatUsd(102_860, lang)}
                   </span>
                 </div>
-                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 md:mt-2 md:h-2">
                   <div
                     className={`h-full rounded-full bg-amber-500 ${
                       reducedMotion ? '' : 'hsg-progress'
@@ -358,4 +354,3 @@ export function HeroShowcase({ lang }: { lang: Lang }) {
     </div>
   )
 }
-

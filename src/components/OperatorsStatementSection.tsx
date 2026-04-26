@@ -56,6 +56,7 @@ export function OperatorsStatementSection({ lang }: { lang: Lang }) {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_0%_-15%,rgba(255,255,255,0.12),transparent_50%),radial-gradient(ellipse_70%_50%_at_100%_0%,rgba(56,189,248,0.12),transparent_45%)]"
         aria-hidden
       />
+
       <div
         className="pointer-events-none absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-brand-500/15 blur-3xl"
         aria-hidden

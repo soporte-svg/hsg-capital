@@ -53,6 +53,15 @@ const STEPS: StepDef[] = [
   },
 ]
 
+function consecutiveFromStart(visible: boolean[]) {
+  let c = 0
+  for (let i = 0; i < visible.length; i++) {
+    if (visible[i]) c = i + 1
+    else break
+  }
+  return visible.length > 0 ? c / visible.length : 0
+}
+
 function JourneyPatternGrid() {
   const cells = useMemo(
     () =>
@@ -102,28 +111,77 @@ function JourneyPatternGrid() {
   )
 }
 
+const IO_OPTS: IntersectionObserverInit = {
+  threshold: 0.2,
+  rootMargin: '0px 0px -6% 0px',
+}
+
+function prefersReducedMotionInitially() {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 export function JourneyTimelineSection({ lang }: { lang: Lang }) {
   const sectionRef = useRef<HTMLElement>(null)
-  const [revealed, setRevealed] = useState(false)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const stepRefs = useRef<(HTMLLIElement | null)[]>([])
+  const reducedInitially = prefersReducedMotionInitially()
+  const [headerInView, setHeaderInView] = useState(reducedInitially)
+  const [stepVisible, setStepVisible] = useState(() =>
+    reducedInitially ? STEPS.map(() => true) : STEPS.map(() => false),
+  )
+
+  const lineProgress = useMemo(
+    () => consecutiveFromStart(stepVisible),
+    [stepVisible],
+  )
+
+  const footnoteVisible = stepVisible[STEPS.length - 1] === true
 
   useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onMotionChange = () => {
+      if (mq.matches) {
+        setHeaderInView(true)
+        setStepVisible(STEPS.map(() => true))
+      }
+    }
+    mq.addEventListener('change', onMotionChange)
+
     if (mq.matches) {
-      setRevealed(true)
-      return
+      return () => mq.removeEventListener('change', onMotionChange)
     }
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setRevealed(true)
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -6% 0px' },
-    )
-    io.observe(el)
-    return () => io.disconnect()
+    const headerEl = headerRef.current
+    const headerIo = new IntersectionObserver(([e]) => {
+      if (e?.isIntersecting) setHeaderInView(true)
+    }, IO_OPTS)
+    if (headerEl) headerIo.observe(headerEl)
+
+    const stepIo = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        const raw = (entry.target as HTMLElement).dataset.stepIndex
+        const idx = raw !== undefined ? Number.parseInt(raw, 10) : NaN
+        if (Number.isNaN(idx) || idx < 0 || idx >= STEPS.length) return
+        setStepVisible((prev) => {
+          if (prev[idx]) return prev
+          const next = [...prev]
+          next[idx] = true
+          return next
+        })
+      })
+    }, IO_OPTS)
+
+    for (const el of stepRefs.current) {
+      if (el) stepIo.observe(el)
+    }
+
+    return () => {
+      mq.removeEventListener('change', onMotionChange)
+      headerIo.disconnect()
+      stepIo.disconnect()
+    }
   }, [])
 
   return (
@@ -136,8 +194,9 @@ export function JourneyTimelineSection({ lang }: { lang: Lang }) {
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4">
         <header
+          ref={headerRef}
           className={`mx-auto max-w-3xl text-center transition-all duration-700 ease-out ${
-            revealed ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            headerInView ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-600 md:text-xs">
@@ -164,10 +223,9 @@ export function JourneyTimelineSection({ lang }: { lang: Lang }) {
               aria-hidden
             >
               <div
-                className={`h-full w-full origin-top rounded-full transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
-                  revealed ? 'scale-y-100' : 'scale-y-0'
-                }`}
+                className="h-full w-full origin-top rounded-full will-change-transform motion-safe:transition-[transform] motion-safe:duration-[900ms] motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={{
+                  transform: `scaleY(${lineProgress})`,
                   background:
                     'linear-gradient(180deg, #2563eb 0%, #3b82f6 38%, #0d9488 78%, #10b981 100%)',
                 }}
@@ -178,35 +236,28 @@ export function JourneyTimelineSection({ lang }: { lang: Lang }) {
               {STEPS.map((step, index) => {
                 const Icon = step.icon
                 const isLast = index === STEPS.length - 1
+                const visible = stepVisible[index]
 
                 return (
                   <li
                     key={step.titleKey}
+                    ref={(el) => {
+                      stepRefs.current[index] = el
+                    }}
+                    data-step-index={index}
                     className={`flex gap-5 transition-all duration-700 ease-out md:gap-8 ${
                       isLast ? 'pb-0' : 'pb-12 md:pb-14'
                     } ${
-                      revealed
-                        ? 'translate-y-0 opacity-100'
-                        : 'translate-y-5 opacity-0'
+                      visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
                     }`}
-                    style={{
-                      transitionDelay: revealed ? `${120 + index * 100}ms` : '0ms',
-                    }}
                   >
                     <div className="relative z-10 flex w-11 shrink-0 justify-center md:w-12">
                       <div
-                        className={`mt-0.5 flex h-11 w-11 items-center justify-center rounded-full shadow-sm ring-2 transition-transform duration-500 ease-out md:h-12 md:w-12 ${
+                        className={`mt-0.5 flex h-11 w-11 items-center justify-center rounded-full shadow-sm ring-2 transition-all duration-700 ease-out md:h-12 md:w-12 ${
                           isLast
                             ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white ring-emerald-200/90'
                             : 'bg-white text-brand-600 ring-brand-100'
-                        } ${
-                          revealed
-                            ? 'scale-100'
-                            : 'scale-75 md:scale-[0.85]'
-                        }`}
-                        style={{
-                          transitionDelay: revealed ? `${180 + index * 100}ms` : '0ms',
-                        }}
+                        } ${visible ? 'scale-100' : 'scale-[0.82]'}`}
                       >
                         <Icon
                           className="h-5 w-5"
@@ -234,11 +285,8 @@ export function JourneyTimelineSection({ lang }: { lang: Lang }) {
 
           <p
             className={`mt-10 text-center text-xs leading-5 text-slate-500 transition-all duration-700 ease-out md:text-sm ${
-              revealed ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+              footnoteVisible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
             }`}
-            style={{
-              transitionDelay: revealed ? `${120 + STEPS.length * 100 + 80}ms` : '0ms',
-            }}
           >
             {t(lang, 'journey_footnote')}
           </p>

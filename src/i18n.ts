@@ -51,14 +51,14 @@ const es: Dict = {
   calc_bullet_properties: '{count} propiedades',
   calc_bullet_net_rent: '~{amount}/mes en renta neta proyectada',
   calc_bullet_coc: '{pct}% cash-on-cash anual estimado',
-  calc_bullet_timeline: 'Propiedades operadas y rentando en 60-90 días',
+  calc_bullet_timeline: 'Propiedades operadas y rentando en 30-60 días',
   calc_projection_title: 'Proyección a 5 años',
   calc_projection_cashflow: 'Cash flow acumulado',
-  calc_projection_equity: 'Apreciación de equity',
+  calc_projection_equity: 'Plusvalía del activo',
   calc_projection_total: 'Retorno total',
   calc_disclaimer:
     'Estimaciones basadas en data operativa. Tu resultado real puede variar.',
-  calc_cta: 'Quiero hablar con alguien sobre estos números',
+  calc_cta: 'Quiero hablar sobre estos números',
   calc_visual_alt: 'Propiedad tipo cartera en Chicago, Illinois',
   calc_visual_caption: 'Ejemplo de activo en cartera — operación real, EE. UU.',
 
@@ -228,7 +228,7 @@ const es: Dict = {
   final_cta_secondary: 'Ver calculadora',
 
   footer_legal:
-    'HSG Investment no es un asesor de inversiones registrado. Toda inversión conlleva riesgo.',
+    'Los números mostrados son de referencia y están basados en datos históricos y operativos. Los valores pueden variar según las condiciones del mercado y cada activo.',
 }
 
 const en: Dict = {
@@ -281,14 +281,14 @@ const en: Dict = {
   calc_bullet_properties: '{count} properties',
   calc_bullet_net_rent: '~{amount}/mo in projected net rent',
   calc_bullet_coc: '{pct}% estimated annual cash-on-cash',
-  calc_bullet_timeline: 'Properties operating and renting in 60-90 days',
+  calc_bullet_timeline: 'Properties operating and renting in 30-60 days',
   calc_projection_title: '5-year projection',
   calc_projection_cashflow: 'Cumulative cash flow',
   calc_projection_equity: 'Equity appreciation',
   calc_projection_total: 'Total return',
   calc_disclaimer:
     'Estimates based on operating data. Your actual results may vary.',
-  calc_cta: 'I want to talk to someone about these numbers',
+  calc_cta: 'I want to talk about these numbers',
   calc_visual_alt: 'Sample portfolio property in Chicago, Illinois',
   calc_visual_caption: 'Example in-portfolio asset — real operations, U.S.',
 
@@ -458,7 +458,7 @@ const en: Dict = {
   final_cta_secondary: 'View calculator',
 
   footer_legal:
-    'HSG Investment is not a registered investment advisor. All investments involve risk.',
+    'Figures shown are for reference and are based on historical and operating data. Results can vary depending on market conditions and the specific asset.',
 }
 
 export function t(lang: Lang, key: string) {
